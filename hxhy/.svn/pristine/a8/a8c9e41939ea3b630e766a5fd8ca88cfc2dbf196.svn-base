@@ -1,0 +1,8 @@
+package com.hxhy.mapper;
+
+import com.hxhy.model.po.HxhyWorkTime;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyWorkTimeMapper extends MyMapper<HxhyWorkTime> {
+
+}

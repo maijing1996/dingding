@@ -1,0 +1,14 @@
+package com.hxhy;
+
+import java.util.Date;
+
+import com.hxhy.util.DateUtil;
+
+public class Test {
+
+	public static void main(String[] args) throws Exception {
+
+		System.out.println(DateUtil.getDistanceByDay(new Date(), -1));
+		System.out.println(DateUtil.getDistanceByDay(new Date(), 1));
+	}
+}

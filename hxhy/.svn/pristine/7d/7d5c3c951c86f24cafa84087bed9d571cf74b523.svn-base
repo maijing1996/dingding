@@ -1,0 +1,96 @@
+
+
+<title>网站用户</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a>主页</a>
+    <a><cite>考勤管理</cite></a>
+    <a href="javascript:;" layadmin-event="refresh"><cite>请假类型</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="OM-module-temp">
+  <div class="layui-card">
+    <div class="layui-card-body">
+      <div style="padding-bottom: 10px;">
+        <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+      </div>
+      <table id="OM-attendance-leave" lay-filter="OM-attendance-leave"></table>
+      <script type="text/html" id="table-toolbar-leave">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>
+	layui.use('attendance', layui.factory('attendance')).use(['admin', 'attendance', 'table'], function(){
+		var $ = layui.$,
+		admin = layui.admin,
+		view = layui.view,
+		table = layui.table,
+		form = layui.form;
+
+		//事件
+  		var active = {
+			add: function(){
+				view('OM-module-temp').render('attendance/component/leave-add', null).done(function() {
+					//动态加载
+					form.render();
+					//提交监听
+					form.on('submit(OM-form-submit)', function(data){
+			    		var field = data.field;
+			    		if(field.is_pay == 'on') {
+			    			field.is_pay = 1;
+			    		} else {
+			    			field.is_pay = 0;
+			    		}
+			    		if(field.is_del == 'on') {
+			    			field.is_del = 1;
+			    		} else {
+			    			field.is_del = 0;
+			    		}
+			    		/* if(field.sequence < 0){
+			    			layer.msg('排序输入有误');
+		      				return false;
+			    		} */
+			    		
+			    		//提交
+			    		$.ajax({
+			    			type: "POST",
+							url: "/manager/attendance/leave/insert",
+							dataType:'json',//预期服务器返回的数据类型
+							contentType: "application/json; charset=utf-8",
+							async: false,
+							data: JSON.stringify(field),
+							success: function(data){
+								//直接跳转不做任何处理且提示
+								layer.open({
+		                  	      	content: data.msg,
+		                   	     	btn: ['确认'],
+		                   	     	yes: function(index, layero) {
+		                        		layer.close(index);
+		                        		//刷新当前页面
+		        			    		window.location.reload();
+		        			    		//修改路径，防止由于url 问题无法跳转的情况
+		        	    				window.history.pushState(null, null, '/start/index.html#/attendance/leave');
+		                        	}
+		                   	 	});
+							}, error: function(){
+								location.hash='/system/404';
+							}
+			    		});
+			    		return false;
+			  		});
+				});
+      		}
+  		};
+		
+		$('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+		});
+	});
+</script>

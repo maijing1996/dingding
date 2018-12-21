@@ -1,0 +1,29 @@
+package com.hxhy.model.po;
+
+import com.hxhy.model.common.BaseEntity;
+
+public class HxhyFinance extends BaseEntity {
+
+	private Double company_money;
+	private Double person_money;
+	private Integer probation;
+	
+	public Double getCompany_money() {
+		return company_money;
+	}
+	public void setCompany_money(Double company_money) {
+		this.company_money = company_money;
+	}
+	public Double getPerson_money() {
+		return person_money;
+	}
+	public void setPerson_money(Double person_money) {
+		this.person_money = person_money;
+	}
+	public Integer getProbation() {
+		return probation;
+	}
+	public void setProbation(Integer probation) {
+		this.probation = probation;
+	}
+}

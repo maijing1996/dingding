@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyRevenueMapper">
+	
+	<!-- 查询所有的税率信息 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.RevenueInfo">
+		SELECT id, type, threshold, ceiling, tax_rate, add_time
+		FROM hxhy_revenue 
+	</select>
+</mapper>

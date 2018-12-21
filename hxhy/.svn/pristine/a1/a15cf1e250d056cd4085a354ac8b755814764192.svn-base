@@ -1,0 +1,127 @@
+package com.hxhy.model.po;
+
+import com.hxhy.model.common.BaseEntity;
+
+public class HxhyFinance extends BaseEntity {
+
+	private Double provident_fund;
+	private Double social_security;
+	private Integer type;
+	private Double com_pension;
+	private Double com_medical;
+	private Double com_unemployment;
+	private Double com_provident_fund;
+	private Double com_provident_fund_supplement;
+	private Double com_work_injury;
+	private Double com_bear;
+	private Double per_pension;
+	private Double per_medical;
+	private Double per_unemployment;
+	private Double per_provident_fund;
+	private Double per_provident_fund_supplement;
+	private Integer probation;
+	private Double late_gold;
+	
+	public Double getProvident_fund() {
+		return provident_fund;
+	}
+	public void setProvident_fund(Double provident_fund) {
+		this.provident_fund = provident_fund;
+	}
+	public Double getSocial_security() {
+		return social_security;
+	}
+	public void setSocial_security(Double social_security) {
+		this.social_security = social_security;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public Double getCom_pension() {
+		return com_pension;
+	}
+	public void setCom_pension(Double com_pension) {
+		this.com_pension = com_pension;
+	}
+	public Double getCom_medical() {
+		return com_medical;
+	}
+	public void setCom_medical(Double com_medical) {
+		this.com_medical = com_medical;
+	}
+	public Double getCom_unemployment() {
+		return com_unemployment;
+	}
+	public void setCom_unemployment(Double com_unemployment) {
+		this.com_unemployment = com_unemployment;
+	}
+	public Double getCom_provident_fund() {
+		return com_provident_fund;
+	}
+	public void setCom_provident_fund(Double com_provident_fund) {
+		this.com_provident_fund = com_provident_fund;
+	}
+	public Double getCom_provident_fund_supplement() {
+		return com_provident_fund_supplement;
+	}
+	public void setCom_provident_fund_supplement(Double com_provident_fund_supplement) {
+		this.com_provident_fund_supplement = com_provident_fund_supplement;
+	}
+	public Double getCom_work_injury() {
+		return com_work_injury;
+	}
+	public void setCom_work_injury(Double com_work_injury) {
+		this.com_work_injury = com_work_injury;
+	}
+	public Double getCom_bear() {
+		return com_bear;
+	}
+	public void setCom_bear(Double com_bear) {
+		this.com_bear = com_bear;
+	}
+	public Double getPer_pension() {
+		return per_pension;
+	}
+	public void setPer_pension(Double per_pension) {
+		this.per_pension = per_pension;
+	}
+	public Double getPer_medical() {
+		return per_medical;
+	}
+	public void setPer_medical(Double per_medical) {
+		this.per_medical = per_medical;
+	}
+	public Double getPer_unemployment() {
+		return per_unemployment;
+	}
+	public void setPer_unemployment(Double per_unemployment) {
+		this.per_unemployment = per_unemployment;
+	}
+	public Double getPer_provident_fund() {
+		return per_provident_fund;
+	}
+	public void setPer_provident_fund(Double per_provident_fund) {
+		this.per_provident_fund = per_provident_fund;
+	}
+	public Double getPer_provident_fund_supplement() {
+		return per_provident_fund_supplement;
+	}
+	public void setPer_provident_fund_supplement(Double per_provident_fund_supplement) {
+		this.per_provident_fund_supplement = per_provident_fund_supplement;
+	}
+	public Integer getProbation() {
+		return probation;
+	}
+	public void setProbation(Integer probation) {
+		this.probation = probation;
+	}
+	public Double getLate_gold() {
+		return late_gold;
+	}
+	public void setLate_gold(Double late_gold) {
+		this.late_gold = late_gold;
+	}
+}

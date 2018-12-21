@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyPayrollMapper">
+
+	<!-- 获得员工结算信息 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.Payroll">
+		SELECT hp.id, hp.monthy, hp.work_date, hp.all_date, hp.leave_money, hp.late_money, hp.bonus, hp.total,
+			hp.meal_fee, hp.subtotal, hp.back_pay, hp.overtime_pay, hp.per_reserved_fund, hp.per_social_insurance,
+			hp.individual_income_tax, hp.real_money, hp.basics_money, hp.money, hm.is_work, hm.is_official, hm.`name`,
+			hp.remark
+		FROM hxhy_payroll hp INNER JOIN hxhy_manager hm ON hm.user_id = hp.user_id
+		<where>
+			<if test="monthy != null and monthy != ''">
+				AND monthy = #{monthy}
+			</if>
+			<if test="name != null and name != ''">
+				AND hm.`name` LIKE CONCAT('%', #{name}, '%')
+			</if>
+		</where>
+		ORDER BY hp.id DESC
+	</select>
+	
+	<!-- 获得个人所有的薪酬信息 -->
+	<select id="getInfo" resultType="com.hxhy.model.po.HxhyPayroll">
+		SELECT monthy, work_date, all_date, leave_money, late_money, bonus, total, meal_fee, subtotal, back_pay, money,
+			overtime_pay, per_social_insurance, per_reserved_fund, individual_income_tax, real_money, basics_money, remark
+		FROM hxhy_payroll
+		WHERE user_id = #{userId}
+		ORDER BY id ASC
+	</select>
+</mapper>

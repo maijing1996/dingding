@@ -1,0 +1,110 @@
+package com.hxhy.controller.manager.finance;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.hxhy.exception.BusinessException;
+import com.hxhy.model.common.BaseResponse;
+import com.hxhy.model.dto.RevenueInfo;
+import com.hxhy.model.po.HxhyRevenue;
+import com.hxhy.service.HxhyRevenueService;
+import com.hxhy.util.RegexUtil;
+import com.hxhy.util.StringUtil;
+
+@Controller
+@ResponseBody
+@RequestMapping("/manager/finance/revenue")
+public class RevenueController {
+
+	@Autowired
+	private HxhyRevenueService hxhyRevenueService;
+	
+	/**
+	 * 查询所有的税收信息
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/info", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse listInfo(@RequestBody Map<String, String> map) {
+		BaseResponse baseResponse = new BaseResponse();
+		List<RevenueInfo> list = hxhyRevenueService.listInfo();
+		return baseResponse.setSuccessList(200, list, list.size());
+	}
+	
+	/**
+	 * 添加税收信息
+	 * 
+	 * @param map
+	 * @return
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse insert(@RequestBody HxhyRevenue hxhyRevenue) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		if(hxhyRevenue.getId() == null) {
+			hxhyRevenueService.save(hxhyRevenue);
+			return baseResponse.setSuccess("添加信息成功");
+		} else {
+			return baseResponse.setError(403, "参数异常");
+		}
+	}
+	
+	/**
+	 * 更新税收信息
+	 * 
+	 * @param hxhyRevenue
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse update(@RequestBody HxhyRevenue hxhyRevenue) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		if(hxhyRevenue.getId() != null) {
+			hxhyRevenueService.update(hxhyRevenue);
+			return baseResponse.setSuccess("添加信息成功");
+		} else {
+			return baseResponse.setError(403, "参数异常");
+		}
+	}
+	
+	/**
+	 * 删除单个税收信息
+	 * @param map
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse delete(@RequestBody Map<String, String> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		if(map != null && StringUtil.strToLong(map.get("id")) != null) {
+			hxhyRevenueService.deleteById(StringUtil.strToLong(map.get("id")));
+			return baseResponse.setSuccess("删除成功！");
+		} else {
+			return baseResponse.setError(403, "参数有误");
+		}
+	}
+	
+	/**
+	 * 批量删除税收信息
+	 * @param map
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/deletes", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse deletes(@RequestBody Map<String, String> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		if(map != null && RegexUtil.matches(RegexUtil.IDS_REGEX, map.get("ids"))) {
+			hxhyRevenueService.deleteByIds(map.get("ids"));
+			return baseResponse.setSuccess("删除成功！");
+		} else {
+			return baseResponse.setError(403, "参数有误");
+		}
+	}
+}

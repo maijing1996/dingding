@@ -1,0 +1,8 @@
+package com.hxhy.mapper;
+
+import com.hxhy.model.po.HxhyAttendanceStatistics;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyAttendanceStatisticsMapper extends MyMapper<HxhyAttendanceStatistics> {
+
+}

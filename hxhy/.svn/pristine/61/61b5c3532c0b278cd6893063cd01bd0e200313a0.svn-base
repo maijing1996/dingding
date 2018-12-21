@@ -1,0 +1,16 @@
+package com.hxhy.service;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhyLeaveRecordMapper;
+import com.hxhy.model.po.HxhyLeaveRecord;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyLeaveRecordService extends BaseService<HxhyLeaveRecord, HxhyLeaveRecordMapper> {
+
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+}

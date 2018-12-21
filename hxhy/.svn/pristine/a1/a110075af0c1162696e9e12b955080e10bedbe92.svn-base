@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyAttendanceStatisticsMapper">
+
+	<!-- 获得用户考勤统计信息 -->
+	<select id="statistics" resultType="com.hxhy.model.dto.AttendanceStatistics">
+		SELECT has.monthy, has.all_date, has.work_date, has.leave_date, has.leave_time, has.late_date, has.is_perfect,
+			has.late_time, has.early_date, has.early_time, has.not_signed, hm.`name`, has.deduct_money, has.leave_money
+		FROM hxhy_attendance_statistics has INNER JOIN hxhy_manager hm ON has.user_id = hm.user_id
+		WHERE has.monthy = #{monthy}
+			<if test="userId != null and userId != ''">
+				AND hm.user_id = #{userId}
+			</if>
+	</select>
+</mapper>

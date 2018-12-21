@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyManagerMapper">
+	
+	<!-- 根据账号密码查询管理员的信息 -->
+	<select id="login" resultType="com.hxhy.model.po.HxhyManager">
+		SELECT id, account, passwd, role_id, user_id, name, is_alter, is_work, is_attendance, add_date
+		FROM hxhy_manager
+		WHERE account = #{account} AND passwd = #{passwd}
+	</select>
+	
+	<!-- 查询所有的管理员 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.ManagerInfo">
+		SELECT hm.id, hm.account, hm.add_date, hm.is_alter, hm.is_attendance, hm.is_work, hm.name, hm.passwd, hm.role_id, hm.user_id,
+			hr.description, hr.id, hr.is_change, hr.is_del, hr.power, hr.title
+		FROM hxhy_manager hm LEFT JOIN	hxhy_role hr ON hr.id = hm.role_id
+		WHERE hr.id != 3
+	</select>
+</mapper>

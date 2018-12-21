@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyOperationLogMapper">
+
+	<!-- 获得日志信息 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.OperationLog">
+		SELECT hol.id, hol.info, hol.info, hol.ip, hol.type, hol.state, hol.add_date, hm.`name`
+		FROM hxhy_operation_log hol INNER JOIN hxhy_manager hm ON hm.id = hol.user_id
+		<where>
+			<if test="state != null">
+				AND hol.state = #{state}
+			</if>
+			<if test="type != null">
+				AND hol.type = #{type}
+			</if>
+		</where>
+		ORDER BY hol.id DESC
+	</select>
+</mapper>

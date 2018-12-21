@@ -1,0 +1,95 @@
+
+<div class="layui-main layui-form">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<form class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">添加请假类型</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span>*</span> 类型：</label>
+						<div class="layui-input-inline">
+							<input type="text" name="title" lay-verify="required" placeholder="请输入类型" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">描述：</label>
+						<div class="layui-input-block">
+							<textarea name="description" placeholder="请输入描述" class="layui-textarea"></textarea>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span>*</span> 满多少天可以获取休假天数：</label>
+						<div class="layui-input-inline">
+							<input type="text" name="date" lay-verify="required" placeholder="请输入满多少天可以获取休假天数" class="layui-input">
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span>*</span> 使用时间：</label>
+						<div class="layui-input-inline">
+							<input type="text" name="amount" lay-verify="required" placeholder="请输入使用时间" class="layui-input">
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label">请假时间下限：</label>
+						<div class="layui-input-inline" style="width: 400px;">
+							<input type="text" name="lower_limit" placeholder="请输入请假时间下限" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">请假时间上限：</label>
+						<div class="layui-input-inline" style="width: 400px;">
+							<input type="text" name="upper_limit" placeholder="请输入请假时间上限" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">是否扣除薪酬：</label>
+						<div class="layui-input-block">
+							<input type="checkbox" name="is_pay" lay-skin="switch" checked>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">是否可删除：</label>
+						<div class="layui-input-block">
+							<input type="checkbox" name="is_del" lay-skin="switch" checked>
+						</div>
+					</div>
+					<div class="layui-form-item" style="border: 0;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="OM-form-submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	layui.use(['admin', 'form', 'upload'], function(){
+ 	 	var $ = layui.$,
+  		form = layui.form,
+  		upload = layui.upload;
+  
+  		//上传头像
+  		upload.render({
+    		elem: '#layuiadmin-upload-useradmin',
+    		url: '/upload',
+    		accept: 'images',
+    		method: 'get',
+    		acceptMime: 'image/*',
+    		done: function(res){
+    			console.log(res);
+      			$(this.item).prev("div").children("input").val(res.url);
+      			$("#pic2").attr("src",res.file);
+      			//动态加载
+    			form.render();
+    		}
+  		});
+	})
+</script>
+

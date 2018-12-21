@@ -1,0 +1,8 @@
+package com.hxhy.mapper;
+
+import com.hxhy.model.po.HxhyOperationLog;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyOperationLogMapper extends MyMapper<HxhyOperationLog> {
+
+}

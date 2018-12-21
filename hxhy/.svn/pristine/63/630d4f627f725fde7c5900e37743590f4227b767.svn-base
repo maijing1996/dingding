@@ -1,0 +1,8 @@
+package com.hxhy.mapper;
+
+import com.hxhy.model.po.HxhyManager;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyManagerMapper extends MyMapper<HxhyManager> {
+
+}

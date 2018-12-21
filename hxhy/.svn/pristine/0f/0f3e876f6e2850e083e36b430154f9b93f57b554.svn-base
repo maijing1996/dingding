@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyManagerMapper">
+	
+	<!-- 根据账号密码查询管理员的信息 -->
+	<select id="login" resultType="com.hxhy.model.po.HxhyManager">
+		SELECT id, account, passwd, role_id, user_id, name, is_alter, is_work, is_attendance, add_date
+		FROM hxhy_manager
+		WHERE account = #{account} AND passwd = #{passwd}
+	</select>
+	
+	<!-- 查询所有的管理员 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.ManagerInfo">
+		SELECT hm.id, hm.`name`, hm.basics_money, hm.money, hr.title, hd.`name` dname
+		FROM hxhy_manager hm INNER JOIN	hxhy_role hr ON hr.id = hm.role_id
+			INNER JOIN hxhy_department hd ON hm.department_id = hd.department_id
+		WHERE hr.id != 3 AND hm.is_work = 1
+	</select>
+	
+	<!-- 获得所有非超级管理员的职工信息 -->
+	<select id="listEmployee" resultType="com.hxhy.model.po.HxhyManager">
+		SELECT id, `name`, user_id
+		FROM hxhy_manager
+		WHERE role_id != 1 AND is_work = 1
+	</select>
+	
+	<!-- 查询所有员工信息 -->
+	<select id="listEmployeeInfo" resultType="com.hxhy.model.dto.Employee">
+		SELECT hm.id, hr.title AS 'position', hm.name, hm.is_work, hm.basics_money, hm.money, hm.is_attendance,
+			hd.name AS department, hws.title , hws.description, hm.department_id, hm.user_id, hm.is_settlement
+		FROM hxhy_role hr INNER JOIN hxhy_manager hm ON hr.id = hm.role_id
+			INNER JOIN hxhy_department hd ON hd.department_id = hm.department_id
+			INNER JOIN hxhy_work_scheme hws ON hws.id = hm.word_id
+	</select>
+</mapper>

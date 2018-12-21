@@ -1,0 +1,113 @@
+
+
+<title>网站用户</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a>主页</a>
+    <a><cite>财务设置</cite></a>
+    <a href="javascript:;" layadmin-event="refresh"><cite>基本设置</cite></a>
+  </div>
+</div>
+
+<div class="layui-main layui-form" id="ones">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<div class="layui-tab layui-tab-card" lay-filter="test1">
+				<ul class="layui-tab-title">
+					<li class="layui-this">基本设置</li>
+				</ul>
+				<form class="layui-tab-content">
+					<script type="text/html" template lay-url="/manager/finance/setting/info" lay-type="post">
+						<input type="hidden" class="layui-input" name="id" value="{{d.data.id}}">
+						<div class="layui-form-item">
+							<label class="layui-form-label">公司缴纳的公积金：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="company_money" lay-verify="required" placeholder="请输入公司缴纳的公积金" class="layui-input" value="{{d.data.company_money}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux">元</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 个人缴纳的公积金：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="person_money" lay-verify="required" placeholder="请输入个人缴纳的公积金金额" class="layui-input" value="{{d.data.person_money}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux">元</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 试用期：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="probation" lay-verify="required" placeholder="请输入试用期时间" class="layui-input" value="{{d.data.probation}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux">月</div>
+						</div>
+						<div class="layui-form-item" style="border: 0;">
+							<div class="layui-input-block">
+								<button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-submit">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+						</div>
+					</script>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+ <script>
+	layui.use(['admin', 'form', 'upload'], function(){
+		var $ = layui.$,
+	  	form = layui.form,
+	  	admin = layui.admin,
+	  	upload = layui.upload;
+		
+	  	//
+	  	form.on('submit(LAY-user-front-submit)', function(data){
+    		var field = data.field;
+    		
+    		if(field.probation < 0){
+    			layer.msg("请输入正确的试用期时间！");
+    			return false;
+    		}
+    		if(!(/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/.test(field.person_money))) {
+    			layer.msg('请输入正确的个人缴纳公积金金额！');
+    			return false;
+    		}
+    		if(!(/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/.test(field.company_money))) {
+    			layer.msg('请输入正确的公司缴纳公积金金额！');
+    			return false;
+    		}
+    		
+    		$.ajax({
+    			type: "POST",
+				url: "/manager/finance/setting/update",
+				dataType:'json',//预期服务器返回的数据类型
+				contentType: "application/json; charset=utf-8",
+				async: false,
+				data: JSON.stringify(field),
+				success: function(data){
+					layer.open({
+                        content: data.msg,
+                        btn: ['确认'],
+                        yes: function(index, layero) {
+                        	layer.close(index);
+                        	//刷新当前页面
+    			    		window.location.reload();
+                        }
+                    });
+				}, error: function(){
+					location.hash='/system/404';
+				}
+    		});
+    		return false;
+  		});
+	});
+</script>
+
+
+
+
+
+
+
+

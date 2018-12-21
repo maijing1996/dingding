@@ -1,0 +1,74 @@
+
+<div class="layui-main layui-form">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<form class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">编辑菜单</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-form-item">
+						<label class="layui-form-label">工作方案：</label>
+						<div class="layui-input-inline">
+							<select name="work_id" lay-filter="h_work_id" id="h_work_id"></select>
+						</div>
+					</div>
+					
+					<script type="text/html" template>
+						<div class="layui-form-item class-info">
+							<label class="layui-form-label"><span>*</span> 基本薪酬：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="basics_money" value="{{ d.params.basics_money || '' }}" lay-verify="required" placeholder="请输入基本薪酬" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item class-info">
+							<label class="layui-form-label"><span>*</span> 奖金：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="money" value="{{ d.params.money || '' }}" lay-verify="required" placeholder="请输入奖金" class="layui-input">
+							</div>
+						</div>		
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">是否在职：</label>
+							<div class="layui-input-block">
+									{{# if(d.params.is_work == 0){ }}
+										<input type="checkbox" name="is_work" lay-skin="switch">
+									{{#} else { }}
+										<input type="checkbox" name="is_work" lay-skin="switch" checked>
+									{{#} }}
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">是否参与考勤：</label>
+							<div class="layui-input-block">
+									{{# if(d.params.is_attendance == 0){ }}
+										<input type="checkbox" name="is_attendance" lay-skin="switch">
+									{{#} else { }}
+										<input type="checkbox" name="is_attendance" lay-skin="switch" checked>
+									{{#} }}
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">是否结算薪酬：</label>
+							<div class="layui-input-block">
+									{{# if(d.params.is_settlement == 0){ }}
+										<input type="checkbox" name="is_settlement" lay-skin="switch">
+									{{#} else { }}
+										<input type="checkbox" name="is_settlement" lay-skin="switch" checked>
+									{{#} }}
+							</div>
+						</div>
+					
+						<input type="hidden" name="id" value="{{ d.params.id || '' }}">
+					</script>
+					<div class="layui-form-item" style="border: 0;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="OM-form-submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

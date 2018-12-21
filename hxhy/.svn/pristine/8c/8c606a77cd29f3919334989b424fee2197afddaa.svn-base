@@ -1,0 +1,163 @@
+package com.hxhy.controller.manager.confine;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.hxhy.conf.MySiteSetting;
+import com.hxhy.exception.BusinessException;
+import com.hxhy.model.common.BaseResponse;
+import com.hxhy.model.dto.ManagerInfo;
+import com.hxhy.model.po.HxhyManager;
+import com.hxhy.model.po.HxhyRole;
+import com.hxhy.service.HxhyManagerService;
+import com.hxhy.service.HxhyRoleService;
+import com.hxhy.util.DateUtil;
+import com.hxhy.util.MD5Util;
+import com.hxhy.util.RedisUtil;
+import com.hxhy.util.RegexUtil;
+import com.hxhy.util.StringUtil;
+
+@Controller
+@ResponseBody
+@RequestMapping("/manager")
+public class HxhyManagerController {
+
+	@Autowired
+	private HxhyRoleService hxhyRoleService;
+	@Autowired
+	private HxhyManagerService hxhyManagerService;
+	@Autowired
+	public MySiteSetting mySiteSetting;
+	@Autowired
+	private RedisUtil redisUtil; 
+	
+	/**
+	 * 查找所有的管理员
+	 * 
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/info", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse listInfo(@RequestBody Map<String, String> map) {
+		BaseResponse baseResponse = new BaseResponse();
+
+		List<ManagerInfo> list = hxhyManagerService.listInfo();
+
+		return baseResponse.setValue("操作成功！", list);
+	}
+
+	/**
+	 * 添加管理员
+	 * 
+	 * @param
+	 * @return
+	 * @throws BusinessException
+	 */
+	/*
+	 * @RequestMapping(value = "/insert", method = RequestMethod.POST, produces =
+	 * "application/json;charset=utf-8") public BaseResponse save(@RequestBody
+	 * HxhyManager hxhyManager) throws BusinessException { BaseResponse baseResponse
+	 * = new BaseResponse();
+	 * 
+	 * if (hxhyManager.getAccount() == null ||
+	 * !RegexUtil.matches(RegexUtil.ACCOUNT_REGEX, hxhyManager.getAccount()) ||
+	 * hxhyManager.getAccount().length() < 4) { return baseResponse.setError(404,
+	 * "请输入正确的用户名！"); } if (hxhyManager.getPasswd() == null ||
+	 * !RegexUtil.matches(RegexUtil.PASSWORD_REGEX, hxhyManager.getPasswd())) {
+	 * return baseResponse.setError(404, "请输入正确的登入密码！"); } if
+	 * (hxhyManager.getRole_id() == null) { return baseResponse.setError(404,
+	 * "请输入角色类型！"); } if (hxhyManager.getIs_work() == null) { return
+	 * baseResponse.setError(404, "请确认是否需要激活！"); } Date date = new Date(); String pw
+	 * = MD5Util.MD5(hxhyManager.getPasswd()); hxhyManager.setPasswd(pw);
+	 * hxhyManager.setAdd_date(date);
+	 * 
+	 * hxhyManagerService.save(hxhyManager); return baseResponse.setValue("添加成功！",
+	 * null); }
+	 */
+
+	/**
+	 * 删除单个管理员
+	 * 
+	 * @param map
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/delect", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse delect(@RequestBody Map<String, String> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		if (map.get("id") != null) {
+			hxhyManagerService.deleteById(StringUtil.strToLong(map.get("id")));
+			return baseResponse.setValue("删除管理员成功！", null);
+		} else {
+			return baseResponse.setError(404, "操作对象不明确！");
+		}
+	}
+
+	/**
+	 * 批量删除管理员
+	 * 
+	 * @param map
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/delects", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse delects(@RequestBody Map<String, String> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		if (map.get("ids") != null && RegexUtil.matches(RegexUtil.IDS_REGEX, map.get("ids"))) {
+			hxhyManagerService.deleteByIds(map.get("ids"));
+			return baseResponse.setValue("删除管理员成功！", null);
+		} else {
+			return baseResponse.setError(404, "操作对象不明确！");
+		}
+	}
+
+	/**
+	 * 修改管理员
+	 * @param hxhyManager
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse update(HttpServletRequest request, @RequestBody HxhyManager hxhyManager) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		HxhyManager hxhyManager2 = new HxhyManager();
+//		RedisUtil redisUtil = new RedisUtil();
+		HxhyManager hxhyManager3 = (HxhyManager) redisUtil.get(mySiteSetting.getSessionName()+request.getSession().getId());
+		if (hxhyManager3.getIs_alter() != 1) {
+			if (hxhyManager.getId() != null) {
+				if (hxhyManager.getAccount() != null || RegexUtil.matches(RegexUtil.ACCOUNT_REGEX, hxhyManager.getAccount())
+						|| hxhyManager.getAccount().length() > 4) {
+					hxhyManager2.setAccount(hxhyManager.getAccount());
+				}
+				if (hxhyManager.getPasswd() == null || !RegexUtil.matches(RegexUtil.PASSWORD_REGEX, hxhyManager.getPasswd())) {
+					String pw = MD5Util.MD5(hxhyManager.getPasswd());
+					hxhyManager2.setPasswd(pw);
+				}
+				if (hxhyManager.getRole_id() == null) {
+					hxhyManager2.setRole_id(hxhyManager.getRole_id());
+				}
+				if (hxhyManager.getIs_work() == null) {
+					hxhyManager2.setIs_work(hxhyManager.getIs_work());
+				}
+				hxhyManagerService.update(hxhyManager2);
+				return baseResponse.setValue("修改成功！", null);
+			} else {
+				return baseResponse.setError(404, "操作对象不明确！");
+			}
+		} else {
+			return baseResponse.setError(404, "你已经修改过了！");
+		}
+
+	}
+
+}

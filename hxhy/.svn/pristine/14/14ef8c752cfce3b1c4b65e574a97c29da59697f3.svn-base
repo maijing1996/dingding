@@ -1,0 +1,150 @@
+package com.hxhy.model.po;
+
+import java.util.Date;
+
+import com.hxhy.model.common.BaseEntity;
+
+public class HxhyPayroll extends BaseEntity {
+	
+	private String user_id;
+	private Integer work_date;
+	private Integer all_date;
+	private Double leave_money;
+	private Double late_money;
+	private Double bonus;//奖金
+	private Double total;//小计
+	private Double meal_fee;//餐费
+	private Double subtotal;//扣除餐费等后的小计
+	private Double back_pay;//补发工资
+	private Double overtime_pay;
+	private Double per_social_insurance;
+	private Double com_social_insurance;
+	private Double per_reserved_fund;//个人公积金
+	private Double com_reserved_fund;//公积金
+	private Double individual_income_tax;//个税
+	private Double real_money;//实发金额
+	private Double company_payment;
+	private String remark;//备注
+	private Date add_date;
+	
+	public String getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+	public Integer getWork_date() {
+		return work_date;
+	}
+	public void setWork_date(Integer work_date) {
+		this.work_date = work_date;
+	}
+	public Integer getAll_date() {
+		return all_date;
+	}
+	public void setAll_date(Integer all_date) {
+		this.all_date = all_date;
+	}
+	public Double getLeave_money() {
+		return leave_money;
+	}
+	public void setLeave_money(Double leave_money) {
+		this.leave_money = leave_money;
+	}
+	public Double getLate_money() {
+		return late_money;
+	}
+	public void setLate_money(Double late_money) {
+		this.late_money = late_money;
+	}
+	public Double getBonus() {
+		return bonus;
+	}
+	public void setBonus(Double bonus) {
+		this.bonus = bonus;
+	}
+	public Double getTotal() {
+		return total;
+	}
+	public void setTotal(Double total) {
+		this.total = total;
+	}
+	public Double getMeal_fee() {
+		return meal_fee;
+	}
+	public void setMeal_fee(Double meal_fee) {
+		this.meal_fee = meal_fee;
+	}
+	public Double getSubtotal() {
+		return subtotal;
+	}
+	public void setSubtotal(Double subtotal) {
+		this.subtotal = subtotal;
+	}
+	public Double getBack_pay() {
+		return back_pay;
+	}
+	public void setBack_pay(Double back_pay) {
+		this.back_pay = back_pay;
+	}
+	public Double getOvertime_pay() {
+		return overtime_pay;
+	}
+	public void setOvertime_pay(Double overtime_pay) {
+		this.overtime_pay = overtime_pay;
+	}
+	public Double getPer_social_insurance() {
+		return per_social_insurance;
+	}
+	public void setPer_social_insurance(Double per_social_insurance) {
+		this.per_social_insurance = per_social_insurance;
+	}
+	public Double getCom_social_insurance() {
+		return com_social_insurance;
+	}
+	public void setCom_social_insurance(Double com_social_insurance) {
+		this.com_social_insurance = com_social_insurance;
+	}
+	public Double getPer_reserved_fund() {
+		return per_reserved_fund;
+	}
+	public void setPer_reserved_fund(Double per_reserved_fund) {
+		this.per_reserved_fund = per_reserved_fund;
+	}
+	public Double getCom_reserved_fund() {
+		return com_reserved_fund;
+	}
+	public void setCom_reserved_fund(Double com_reserved_fund) {
+		this.com_reserved_fund = com_reserved_fund;
+	}
+	public Double getIndividual_income_tax() {
+		return individual_income_tax;
+	}
+	public void setIndividual_income_tax(Double individual_income_tax) {
+		this.individual_income_tax = individual_income_tax;
+	}
+	public Double getReal_money() {
+		return real_money;
+	}
+	public void setReal_money(Double real_money) {
+		this.real_money = real_money;
+	}
+	public Double getCompany_payment() {
+		return company_payment;
+	}
+	public void setCompany_payment(Double company_payment) {
+		this.company_payment = company_payment;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public Date getAdd_date() {
+		return add_date;
+	}
+	public void setAdd_date(Date add_date) {
+		this.add_date = add_date;
+	}
+}

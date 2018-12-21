@@ -1,0 +1,52 @@
+
+<div class="layui-main layui-form">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<form class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">编辑税收信息</li>
+				</ul>
+				<div class="layui-tab-content">
+					<script type="text/html" template>
+						<input type="hidden" name="id" value="{{ d.params.id || '' }}">
+						<div class="layui-form-item">
+							<label class="layui-form-label">税收类型：</label>
+							<div class="layui-input-inline">
+								<select name="type" lay-verify="required" id="h_type"></select>
+							</div>
+						</div>
+	
+						<div class="layui-form-item class-info2">
+							<label class="layui-form-label"><span>*</span> 税收起征点：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="threshold" value="{{ d.params.threshold || '' }}" lay-verify="required" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+							</div>
+							<div id="span_info" class="layui-form-mid layui-word-aux"> 元</div>
+						</div>
+						<div class="layui-form-item class-info2">
+							<label class="layui-form-label"><span>*</span> 起征上限：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="ceiling" value="{{ d.params.ceiling || '' }}" lay-verify="required" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+							</div>
+							<div id="span_info" class="layui-form-mid layui-word-aux"> 元</div>
+						</div>
+						<div class="layui-form-item class-info2">
+							<label class="layui-form-label"><span>*</span> 税率：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="tax_rate" value="{{ d.params.tax_rate || '' }}" lay-verify="required" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+							</div>
+							<div id="span_info" class="layui-form-mid layui-word-aux"> %</div>
+						</div>
+					</script>
+
+					<div class="layui-form-item" style="border: 0;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="OM-form-submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

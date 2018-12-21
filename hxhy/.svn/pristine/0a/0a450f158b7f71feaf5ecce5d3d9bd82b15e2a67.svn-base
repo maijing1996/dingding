@@ -1,0 +1,278 @@
+
+
+<title>网站用户</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a>主页</a>
+    <a><cite>财务管理</cite></a>
+    <a href="javascript:;" layadmin-event="refresh"><cite>额外费用</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="OM-module-temp">
+  <div class="layui-card">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">员工名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">所属月份</label>
+          <div class="layui-input-block">
+            <select name="monthy" id="h_monthy"></select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">费用类型</label>
+          <div class="layui-input-block">
+            <select name="extra_type">
+              <option value="">不限</option>
+              <option value="1">补发工资</option>
+              <option value="2">餐费</option>
+              <option value="3">奖金</option>
+              <option value="4">加班费</option>
+              <option value="5">费用报销</option>
+              <option value="6">公司支付</option>
+              <option value="7">公司收入</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">作用对象</label>
+          <div class="layui-input-block">
+            <select name="state">
+              <option value="">不限</option>
+              <option value="1">公司</option>
+              <option value="2">个人</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">资金流向</label>
+          <div class="layui-input-block">
+            <select name="type">
+              <option value="">不限</option>
+              <option value="1">支付</option>
+              <option value="2">收入</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="layui-card-body">
+      <div style="padding-bottom: 10px;">
+        <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">批量删除</button>
+        <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+        <button type="button" class="layui-btn layuiadmin-btn-useradmin" id="test-upload-type"><i class="layui-icon"></i>餐费上传</button>
+      </div>
+      
+      <table id="OM-finance-extra" lay-filter="OM-finance-extra"></table>
+      <script type="text/html" id="table-toolbar-extra">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>
+	layui.use('finance', layui.factory('finance')).use(['admin', 'finance', 'table', 'upload'], function(){
+		var $ = layui.$,
+		admin = layui.admin,
+		view = layui.view,
+		table = layui.table,
+		upload = layui.upload,
+		form = layui.form;
+
+		$('#h_monthy').append("<option value='0'>不限</option>");
+		$.ajax({
+			type: "POST",
+			url: "/manager/finance/extra/monthy",
+			dataType:'json',//预期服务器返回的数据类型
+			contentType: "application/json; charset=utf-8",
+			async: false,
+			success: function(data){
+				for(var i=0; i < data.data.length; i++) {
+					$('#h_monthy').append("<option value="+data.data[i]+">"+data.data[i]+"</option>");
+				}
+			}, error: function() {
+				location.hash='/system/404';
+			}
+		});
+		
+		form.render(null, 'layadmin-userfront-formlist');
+
+		//监听搜索
+		form.on('submit(LAY-user-front-search)', function(data){
+			var field = data.field;
+			//执行重载
+			table.reload('OM-finance-extra', {
+	  			where: field
+			});
+		});
+
+		//指定允许上传的文件类型
+    	upload.render({
+      		elem: '#test-upload-type',
+      		url: '/upload/file',
+      		accept: 'file', //普通文件
+      		done: function(res){
+      			//直接跳转不做任何处理且提示
+				layer.open({
+          	      	content: data.msg,
+           	     	btn: ['确认'],
+           	     	yes: function(index, layero) {
+                		layer.close(index);
+                		//刷新当前页面
+			    		window.location.reload();
+                	}
+           	 	});
+      		}
+    	});
+		
+  		//事件
+  		var active = {
+    		batchdel: function(){
+      			var checkStatus = table.checkStatus('OM-finance-extra'),
+      			checkData = checkStatus.data; //得到选中的数据
+      			if(checkData.length === 0){
+        			return layer.msg('请选择数据');
+      			}
+
+      			//数据封装
+      			var val = '';
+      			for(var i=0; i < checkData.length; i++) {
+      				var obj =checkData[i];
+      				val = val + obj.id + ",";
+      			}
+      			var val = val.substring(0, val.length - 1);
+      			var req = {"ids": val};
+      			
+      			layer.confirm('确定删除吗？', function(index) {
+        			layer.close(index);
+	          		//执行 Ajax 后重载
+	          		$.ajax({
+						type: "POST",
+						url: "/manager/finance/extra/deletes",
+						dataType:'json',//预期服务器返回的数据类型
+						contentType: "application/json; charset=utf-8",
+						async: false,
+						data: JSON.stringify(req),
+						success: function(data){
+							layer.open({
+	                  	      	content: data.msg,
+	                   	     	btn: ['确认'],
+	                   	     	yes: function(index, layero) {
+	                        		layer.close(index);
+	                        		table.reload('OM-finance-extra', null);
+	                        	}
+	                   	 	});
+						}, error: function(){
+							location.hash='/system/404';
+						}
+		    		});
+        		});
+      		},
+      		add: function() {
+    			view('OM-module-temp').render('finance/component/premium-add', null).done(function() {
+    				
+    				//初始化
+    				$("#h_employee").append("<option value='' selected>请选择员工</option>");
+		    		$.ajax({
+						type: "POST",
+						url: "/manager/confine/user/employee",
+						dataType:'json',//预期服务器返回的数据类型
+						contentType: "application/json; charset=utf-8",
+						async: false,
+						success: function(data) {
+							var list = data.data;
+							for(var i=0; list.length > i; i++) {
+								var obj = list[i];
+								$("#h_employee").append("<option value="+obj.user_id+">"+obj.name+"</option>");
+							}
+						}, error: function(){
+							location.hash='/system/404';
+						}
+		    		});
+    				$(".personage").css("display","none");
+    				
+    				//动态加载
+					form.render();
+	          		
+	          		//作用对象监听
+					form.on('select(h_state)', function(data){
+						if(data.value == '2') {
+							$(".personage").css("display","block");
+						} else {
+							$(".personage").css("display","none");
+						}
+						//动态加载
+						form.render();
+					});
+	          		
+					//提交监听
+					form.on('submit(OM-form-submit)', function(data){
+			    		var field = data.field;
+			    		
+			    		//校验
+			    		if(field.state === '2' && field.user_id == '') {
+		      				layer.msg('请填写员工名称');
+		      				return false;
+		      			} else if(field.user_id == '') {
+		      				field.user_id = '0';
+		      			}
+			    		if(field.money < 0) {
+		      				layer.msg('请填写正确的金额');
+		      				return false;
+		      			}
+			    		if(field.use_date != '') {
+			    			field.use_date = new Date(field.use_date).getTime()
+			    			console.log(field.use_date)
+			    		}
+
+			    		//提交
+			    		$.ajax({
+			    			type: "POST",
+							url: "/manager/finance/extra/insert",
+							dataType:'json',//预期服务器返回的数据类型
+							contentType: "application/json; charset=utf-8",
+							async: false,
+							data: JSON.stringify(field),
+							success: function(data){
+								//直接跳转不做任何处理且提示
+								layer.open({
+		                  	      	content: data.msg,
+		                   	     	btn: ['确认'],
+		                   	     	yes: function(index, layero) {
+		                        		layer.close(index);
+		                        		//刷新当前页面
+		        			    		window.location.reload();
+		                        	}
+		                   	 	});
+							}, error: function(){
+								location.hash='/system/404';
+							}
+			    		});
+			    		return false;
+			  		});
+				});
+    		}
+  		};
+  
+  		$('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+    		var type = $(this).data('type');
+    		active[type] ? active[type].call(this) : '';
+  		});
+	});
+</script>

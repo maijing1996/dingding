@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyHolidayMapper">
+
+	<!-- 获得所有节假日信息 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.Holiday">
+		SELECT hh.id, hh.is_use, hh.type, hh.years, hh.monthy, hh.date, hh.description, hd.`name`
+		FROM hxhy_holiday hh LEFT JOIN hxhy_department hd ON hd.department_id = hh.department_id
+		<where>
+			<if test="isUse != null">
+				AND hh.is_use = #{isUse}
+			</if>
+			<if test="departmentId != null and departmentId != ''">
+				AND hh.department_id = #{departmentId}
+			</if>
+		</where>
+		ORDER BY hh.id ASC
+	</select>
+	
+	<!-- 获得指定月份的休假及调班的天数 -->
+	<select id="getStatisics" resultType="com.hxhy.model.dto.StatisticsAmount">
+		SELECT COUNT(state) amount, state
+		FROM hxhy_holiday
+		WHERE monthy = #{monthy}
+		GROUP BY state
+		ORDER BY state
+	</select>
+	
+	<!-- 获取放假的人 -->
+	<select id="listTypeInfo" resultType="com.hxhy.model.dto.Holiday">
+		SELECT type
+		FROM hxhy_holiday
+		GROUP BY type
+	</select>
+</mapper>

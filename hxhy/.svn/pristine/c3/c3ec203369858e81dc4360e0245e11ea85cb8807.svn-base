@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyWorkSchemeMapper">
+
+	<!-- 获得用户考勤统计信息 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.WorkScheme">
+		SELECT hws.id, hws.description, hws.title, hm.`name`, hd.`name` depname
+		FROM hxhy_work_scheme hws LEFT JOIN hxhy_manager hm ON hws.user_id = hm.user_id
+			LEFT JOIN hxhy_department hd ON hd.department_id = hws.department_id
+		<where>
+			<if test="userId != null and userId != ''">
+				AND hm.user_id = #{userId}
+			</if>
+			<if test="departmentId != null and departmentId != ''">
+				AND hd.department_id = #{departmentId}
+			</if>
+		</where>
+		ORDER BY hws.id ASC
+	</select>
+	
+	<!-- 获得方案类型 -->
+	<select id="getTypeByUserId" resultType="int">
+		SELECT hws.type
+		FROM hxhy_work_scheme hws INNER JOIN hxhy_manager hm ON hm.word_id = hws.id
+		WHERE hm.user_id = #{userId}
+	</select>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyWorkTimeMapper">
+
+	<!-- 通过部门id获得工作时间信息 -->
+	<select id="getByDepartmentId" resultType="com.hxhy.model.po.HxhyWorkTime">
+		SELECT hwt.on_duty, hwt.off_duty
+		FROM hxhy_work_scheme hws INNER JOIN hxhy_work_time hwt ON hwt.work_id = hws.id
+		<where>
+			<if test="id != null">
+				AND hws.id = #{id}
+			</if>
+			<if test="departmentId != null">
+				hws.department_id = #{departmentId}
+			</if>
+		</where>
+		ORDER BY hwt.on_duty ASC
+	</select>
+</mapper>

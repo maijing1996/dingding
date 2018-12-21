@@ -1,0 +1,219 @@
+
+
+<title>网站用户</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a>主页</a>
+    <a><cite>个人中心</cite></a>
+    <a href="javascript:;" layadmin-event="refresh"><cite>我的信息</cite></a>
+  </div>
+</div>
+
+<div class="layui-main layui-form">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<div class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">个人信息</li>
+					<li>待定</li>
+					<li>待定</li>
+					<li>待定</li>
+				</ul>
+				<div class="layui-tab-content">
+					<!-- 我的信息 -->
+					<script type="text/html" template lay-url="/manager/personal/information/info" lay-type="post" lay-done="layui.data.done(d);">
+						<div class="layui-tab-item layui-show">
+							<div class="layui-form-item">
+								<label class="layui-form-label"><span>*</span> 名称：</label>
+								<div class="layui-input-inline">
+									<input type="text" value="{{d.data.user.name || ''}}" placeholder="请输入" class="layui-input" readonly="readonly">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label"><span>*</span> 部门：</label>
+								<div class="layui-input-inline">
+									<input type="text" value="{{d.data.user.dname || ''}}" placeholder="请输入" class="layui-input" readonly="readonly">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label"><span>*</span> 手机号码：</label>
+								<div class="layui-input-inline">
+									<input type="text" value="{{d.data.user.phone || ''}}" placeholder="请输入" class="layui-input" readonly="readonly">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label"><span>*</span> 生日：</label>
+								<div class="layui-input-inline">
+									<input type="text" value="{{d.data.user.birthday || ''}}" placeholder="请输入" class="layui-input" readonly="readonly">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label"><span>*</span> 性别：</label>
+								<div class="layui-input-block">
+									{{# if(d.data.user.sex == 1){ }}
+										<input type="checkbox" name="sex" lay-skin="switch" lay-text="女|男" disabled>
+									{{#} else { }}
+										<input type="checkbox" name="sex" lay-skin="switch" lay-text="女|男" disabled checked>
+									{{#} }}
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label"><span>*</span> 基本薪酬：</label>
+								<div class="layui-input-inline">
+									<input type="text" value="{{d.data.user.basics_money || '0'}}" placeholder="请输入" class="layui-input" readonly="readonly">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label"><span>*</span> 基本奖金：</label>
+								<div class="layui-input-inline">
+									<input type="text" value="{{d.data.user.money || '0'}}" placeholder="请输入" class="layui-input" readonly="readonly">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label"><span>*</span> 入职时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" value="{{d.data.user.work_date_str || ''}}" placeholder="请输入" class="layui-input" readonly="readonly">
+								</div>
+							</div>
+							{{# if(d.data.user.is_alter == 0) { }}
+								<div class="layui-form-item" style="border: 0;">
+									<div class="layui-input-block">
+										<button class="layui-btn" id="update-user">修改信息</button>
+									</div>
+								</div>
+							{{# } }}
+						</div>
+					</script>
+					
+					<!-- 税收信息 -->
+					<!-- <div class="layui-tab-item">
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 社保汇缴基数：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="social_security" value="{{d.data.finance.social_security || '0'}}" lay-verify="required" placeholder="请输入公司缴纳的公积金" class="layui-input" readonly="readonly">
+							</div>
+							<div class="layui-form-mid layui-word-aux">元</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 公积金汇缴基数：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="personprovident_fund" value="{{d.data.finance.provident_fund || '0'}}" lay-verify="required" placeholder="请输入个人缴纳的公积金金额" class="layui-input" readonly="readonly">
+							</div>
+							<div class="layui-form-mid layui-word-aux">元</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"> 养老保险金：</label>
+							<div class="layui-input-inline">
+								<input type="text" value="{{d.data.finance.per_pension || '0'}}%" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span>医疗保险金：</label>
+							<div class="layui-input-inline">
+								<input type="text" value="{{d.data.finance.per_medical || '0'}}%" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span>失业保险金：</label>
+							<div class="layui-input-inline">
+								<input type="text" value="{{d.data.finance.per_unemployment || '0'}}%" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">基本住房公积金：</label>
+							<div class="layui-input-inline">
+								<input type="text" value="{{d.data.finance.per_provident_fund || '0'}}%" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">补充住房公积金：</label>
+							<div class="layui-input-inline">
+								<input type="text" value="{{d.data.finance.per_provident_fund_supplement || '0'}}%" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 试用期：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="probation" lay-verify="required" placeholder="请输入试用期时间" class="layui-input" value="{{d.data.finance.probation || '0'}}" readonly="readonly">
+							</div>
+							<div class="layui-form-mid layui-word-aux">月，在统计考勤、统计薪酬会自动按不动的比例算出准确的薪酬（这一步还未实现）</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 迟到早退允许次数：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="late_amount" lay-verify="required" placeholder="请输入试用期时间" class="layui-input" value="{{d.data.finance.late_amount || '0'}}" readonly="readonly">
+							</div>
+							<div class="layui-form-mid layui-word-aux">次</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 迟到早退最低罚金：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="late_gold" lay-verify="required" placeholder="请输入试用期时间" class="layui-input" value="{{d.data.finance.late_gold || '0'}}" readonly="readonly">
+							</div>
+							<div class="layui-form-mid layui-word-aux">元，在超过容忍次数及单次容忍时间后最低扣除的金额</div>
+						</div>
+					</div> -->
+
+					<div class="layui-tab-item">
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 待定：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="stock" value="待开发" placeholder="请输入" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-tab-item">
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 待定：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="stock" value="待开发" placeholder="请输入" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-tab-item">
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 待定：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="stock" value="待开发" placeholder="请输入" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+
+					<!-- <div class="layui-form-item" style="border: 0;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="OM-form-submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div> -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	layui.use(['admin', 'center', 'table'], function(){
+		var $ = layui.$,
+		admin = layui.admin,
+		view = layui.view,
+		table = layui.table,
+		form = layui.form;
+
+		form.render(null, 'layadmin-userfront-formlist');
+
+	});
+	
+	//渲染该模板下的动态表单
+	layui.data.done = function(d){
+	  	layui.use(['form'], function(){
+	  		var $ = layui.$,
+	  		form = layui.form;
+	  		
+	     	form.render();
+	  	});
+	};
+</script>

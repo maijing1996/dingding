@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyUserExtraMoneyMapper">
+
+	<!-- 获得额外费用信息 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.ExtraMoney">
+		SELECT huem.id, huem.state, huem.type, huem.title, huem.description, huem.money,
+			huem.use_date, huem.add_date, huem.monthy, hm.`name`
+		FROM hxhy_user_extra_money huem INNER JOIN hxhy_manager hm ON hm.user_id = huem.user_id
+		<where>
+			<if test="monthy != null and monthy != ''">
+				AND huem.monthy = #{monthy}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND hm.user_id = #{userId}
+			</if>
+			<if test="state != null">
+				AND huem.state = #{state}
+			</if>
+		</where>
+	</select>
+</mapper>

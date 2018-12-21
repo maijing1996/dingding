@@ -1,0 +1,8 @@
+package com.hxhy.mapper;
+
+import com.hxhy.model.po.HxhyRevenue;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyRevenueMapper extends MyMapper<HxhyRevenue> {
+
+}

@@ -1,0 +1,82 @@
+package com.hxhy.controller.manager.attendance;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.PageInfo;
+import com.hxhy.exception.BusinessException;
+import com.hxhy.model.common.BaseResponse;
+import com.hxhy.model.dto.AttendanceLeaveRecord;
+import com.hxhy.model.po.HxhyLeaveRecord;
+import com.hxhy.service.HxhyLeaveRecordService;
+import com.hxhy.util.StringUtil;
+
+@Controller
+@ResponseBody
+@RequestMapping("/manager/attendance/leave/record")
+public class AttendanceLeaveRecordController {
+	
+	@Autowired
+	private HxhyLeaveRecordService hxhyLeaveRecordService;
+	
+	/**
+	 * 查询所有的请假记录
+	 * @return
+	 */
+	@RequestMapping(value = "info", method = RequestMethod.POST, produces = "application/json;chatset=utf-8")
+	public BaseResponse listInfo(@RequestBody Map<String, String> map) {
+		BaseResponse baseResponse = new BaseResponse();
+		if(map != null) {
+			Integer type = null;
+			String monthy = null;
+			if(map.get("type") != null) {
+				if(StringUtil.strToInt(map.get("type")) == 0) {
+					type = null;
+				}else {
+					type = StringUtil.strToInt(map.get("type"));
+				}
+			}
+			
+			if(map.get("monthy") != null) {
+				if(StringUtil.strToInt(map.get("monthy")) == 1) {
+					monthy = "";
+				}else {
+					monthy = map.get("monthy");
+				}
+			}
+			
+			PageInfo<AttendanceLeaveRecord> pageInfo = hxhyLeaveRecordService.listInfo(StringUtil.strToInt(map.get("page")), 
+					StringUtil.strToInt(map.get("size")), monthy, map.get("name"), type);
+			
+			if(pageInfo.getTotal() > 0) {
+				return baseResponse.setSuccessList(200, pageInfo.getList(), pageInfo.getTotal(), 0, 0, 20);
+			}else {
+				return baseResponse.setSuccess("没有数据！");
+			}
+		}else {
+			return baseResponse.setError(403, "参数错误！");
+		}
+	}
+
+	/**
+	 * 审核请假
+	 * @param hxhyLeaveRecord
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse update(@RequestBody HxhyLeaveRecord hxhyLeaveRecord) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		hxhyLeaveRecordService.update(hxhyLeaveRecord);
+		
+		return baseResponse.setSuccess("操作成功！", null);
+	}
+	
+}

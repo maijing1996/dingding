@@ -1,0 +1,17 @@
+package com.hxhy.service;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhyRoleMapper;
+import com.hxhy.model.po.HxhyRole;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyRoleService extends BaseService<HxhyRole, HxhyRoleMapper> {
+
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+
+}

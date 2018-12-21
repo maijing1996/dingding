@@ -1,0 +1,36 @@
+package com.hxhy.controller.manager.attendance;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.hxhy.model.common.BaseResponse;
+import com.hxhy.model.dto.AttendanceLeaveRecord;
+import com.hxhy.service.HxhyLeaveRecordService;
+
+@Controller
+@ResponseBody
+@RequestMapping("/manager/attendance/leave/record")
+public class AttendanceLeaveRecordController {
+	
+	@Autowired
+	private HxhyLeaveRecordService hxhyLeaveRecordService;
+	
+	/**
+	 * 查询所有的请假记录
+	 * @return
+	 */
+	@RequestMapping(value = "info", method = RequestMethod.POST, produces = "application/json;chatset=utf-8")
+	public BaseResponse listInfo() {
+		BaseResponse baseResponse = new BaseResponse();
+		
+		List<AttendanceLeaveRecord> list = hxhyLeaveRecordService.listInfo();
+		
+		return baseResponse.setSuccessList(200, list, list.size(), 0, 0, 20);
+	}
+
+}

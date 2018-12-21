@@ -1,0 +1,123 @@
+
+<div class="layui-main layui-form">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<form class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">编辑菜单</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span>*</span> 作用对象：</label>
+						<div class="layui-input-inline">
+							<select name="state" lay-filter="h_state" lay-verify="required">
+								<option value="" selected>请选择作用对象</option>
+								<option value="1">公司</option>
+								<option value="2">个人</option>
+							</select>
+						</div>
+					</div>
+					
+					<!-- 公共部分 -->
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span>*</span> 资金流向：</label>
+						<div class="layui-input-inline">
+							<select name="type" lay-filter="h_state" lay-verify="required">
+								<option value="" selected>请选择资金流向</option>
+								<option value="1">支出</option>
+								<option value="2">收入</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span>*</span> 费用类型：</label>
+						<div class="layui-input-inline">
+							<select name="extra_type" lay-filter="h_state" lay-verify="required">
+								<option value="" selected>请选择费用类型</option>
+								<option value="1">补发工资</option>
+					            <option value="2">餐费</option>
+					            <option value="3">奖金</option>
+					            <option value="4">加班费</option>
+					            <option value="5">费用报销</option>
+					            <option value="6">公司支付</option>
+					            <option value="7">公司收入</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item class-info">
+						<label class="layui-form-label"><span>*</span> 标题：</label>
+						<div class="layui-input-inline">
+							<input type="text" name="title" lay-verify="required" placeholder="请输入标题" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item class-info">
+						<label class="layui-form-label"> 描述：</label>
+						<div class="layui-input-inline">
+							<textarea rows="6" style=" width: 100%;" name="description" placeholder="请输入描述信息"></textarea>
+						</div>
+					</div>
+					<div class="layui-form-item class-info">
+						<label class="layui-form-label"><span>*</span> 金额：</label>
+						<div class="layui-input-inline">
+							<input type="number" name="money" lay-verify="required" placeholder="请输入金额" class="layui-input">
+						</div>
+					</div>
+					
+					<!-- 个人部分  -->
+					<div class="personage">
+						<div class="layui-form-item">
+							<label class="layui-form-label">员工名称：</label>
+							<div class="layui-input-inline">
+								<select name="user_id" lay-filter="h_employee" id="h_employee"></select>
+							</div>
+						</div>
+					</div>
+					
+					<!-- 公共部分 -->
+					<div class="layui-form-item class-info">
+						<label class="layui-form-label"><span>*</span> 月份：</label>
+						<div class="layui-input-inline">
+							<input type="text" name="monthy" lay-verify="required" id="test-laydate-normal-cn" placeholder="yyyyMM" placeholder="请输入月份信息" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item class-info">
+						<label class="layui-form-label"> 使用日期：</label>
+						<div class="layui-input-inline">
+							<input type="text" name="use_date" id="test-laydate-normal-cn2" placeholder="yyyy-MM-dd" placeholder="请输入使用日期" class="layui-input">
+						</div>
+					</div>
+					
+					<div class="layui-form-item" style="border: 0;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="OM-form-submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	layui.use(['laydate'], function(){
+  		var $ = layui.$,
+  		form = layui.form,
+  		laydate = layui.laydate;
+  
+  		form.render();
+  		
+  		laydate.render({
+  	      	elem: '#test-laydate-normal-cn',
+  	      	type: 'month',
+  	      	format: 'yyyyMM'
+  	    });
+  		
+  		laydate.render({
+   	      	elem: '#test-laydate-normal-cn2',
+   	      	type: 'datetime'
+   	    });
+	});
+</script>
+
+

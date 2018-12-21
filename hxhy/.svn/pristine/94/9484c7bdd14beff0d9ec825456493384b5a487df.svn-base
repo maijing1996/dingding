@@ -1,0 +1,813 @@
+/**
+
+ @Name：order 管理员管理模块控制
+ @Author：偶木
+ @Date：2018-08-28
+    
+ */
+
+ 
+layui.define(['table', 'form'], function(exports){
+	var $ = layui.$,
+	admin = layui.admin,
+	view = layui.view,
+	table = layui.table,
+	form = layui.form;
+	
+	//1考勤记录
+	table.render({
+		elem: '#OM-attendance-record',
+		url: '/manager/attendance/record/info', //模拟接口
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field: 'id', title: '编号'},
+			{field: 'monthy', title: '所属月份'},
+			{field: 'nickname', title: '用户昵称'},
+			{field: 'name', title: '部门'},
+			{field: 'work_date', title: '工作日期'},
+			{field: 'check_type', title: '考勤类型'},
+			{field: 'source_type', title: '信息来源'},
+			{field: 'location_result', title: '打卡位置'},
+			{field: 'user_check_time', title: '打卡时间', width: 170},
+			{field: 'time_result', title: '时间结果'},
+			{field: 'timelong', title: '迟到/早退'},
+			{title: '操作', width: 150, align:'center', fixed: 'right', toolbar: '#table-tookbar-record'}
+		]],
+		page: true,
+		limit: 30,
+		height: 'full-320',
+		//ajax
+		contentType: 'application/json; charset=UTF-8',
+		method: 'post',
+		response: {
+			statusCode: 200
+		},
+		text: '对不起，加载出现异常！'
+	});
+  
+	//管理员列表_监听工具条
+	table.on('tool(OM-attendance-record)', function(obj){
+		var data = obj.data;
+		if(obj.event === 'del'){
+			layer.confirm('确定删除此记录？', function(index){
+				layer.close(index);
+				
+				//数据封装
+				var req = {"id": data.id};
+				//执行 Ajax 后重载
+	          	$.ajax({
+					type: "POST",
+					url: "/manager/admin/delete",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					async: false,
+					data: JSON.stringify(req),
+					success: function(data){
+						layer.open({
+	                        content: data.desc,
+	                        btn: ['确认'],
+	                        yes: function(index, layero) {
+	                        	layer.close(index);
+	                        	table.reload('OM-system-list', null);
+	                        }
+	                    });
+					}, error: function(){
+						location.hash='/system/404';
+					}
+		    	});
+			});
+		} else if(obj.event === 'edit'){
+			view('OM-module-temp').render('power/component/manager-edit', data).done(function() {
+				//执行 Ajax 后重载
+          		/*$.ajax({
+					type: "POST",
+					url: "/manager/role/info",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					async: false,
+					success: function(data){
+						var list = data.data;
+						for(var i=0; list.length > i; i++) {
+							var obj = list[i];
+							$("#m_role").append("<option value="+obj.id+">"+obj.title+"</option>");
+						}
+					}, error: function(){
+						location.hash='/system/404';
+					}
+	    		});*/
+          		//动态加载
+				form.render();
+				
+				//提交监听
+				form.on('submit(OM-form-submit)', function(data){
+		    		/*var field = data.field;
+		    		//校验
+		    		if(field.account === '') {
+	      				layer.msg('请填写用户名');
+	      				return false;
+	      			}
+		    		
+		    		if(field.passwd2 != '' || field.passwd != '') {
+		    			if((field.passwd2 === '' || field.passwd != '') || (field.passwd2 != '' || field.passwd === '')) {
+		    				layer.msg('请填写密码');
+		      				return false;
+		    			} else if(field.passwd2.length < 6 || field.passwd.length < 6 || field.passwd2.length > 18 || field.passwd.length > 18) {
+		      				layer.msg('请填写正确的密码');
+		      				return false;
+		      			} else if(field.passwd2 != field.passwd) {
+		      				layer.msg('填写的两次密码不一致');
+		      				return false;
+		      			}
+	      			}
+		    		
+		    		if(field.is_work === 'on') {
+		    			field.is_work = 1;
+		    		} else {
+		    			field.is_work = 0;
+		    		}*/
+
+		    		//提交
+		    		/*$.ajax({
+		    			type: "POST",
+						url: "/manager/admin/update",
+						dataType:'json',//预期服务器返回的数据类型
+						contentType: "application/json; charset=utf-8",
+						async: true,
+						data: JSON.stringify(field),
+						success: function(data){
+							//直接跳转不做任何处理且提示
+							layer.open({
+	                  	      	content: data.desc,
+	                   	     	btn: ['确认'],
+	                   	     	yes: function(index, layero) {
+	                        		layer.close(index);
+	                        		//刷新当前页面
+	        			    		window.location.reload();
+	        			    		//修改路径，防止由于url 问题无法跳转的情况
+	        	    				window.history.pushState(null, null, '/start/index.html#/power/list');
+	                        	}
+	                   	 	});
+						}, error: function(){
+							location.hash='/system/404';
+						}
+		    		});*/
+		    		return false;
+		  		});
+			});
+		}
+	});
+	
+	//2考勤统计
+	table.render({
+		elem: '#OM-attendance-statistics',
+		url: '/manager/attendance/record/statistics',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field: 'name', title: '姓名'},
+			{field: 'monthy', title: '月份'},
+			{field: 'all_date', title: '满勤天数'},
+			{field: 'work_date', title: '出勤天数'},
+			{field: 'leave_date', title: '请假天数'},
+			{field: 'leave_time', title: '请假时长'},
+			{field: 'late_date', title: '迟到天数'},
+			{field: 'early_date', title: '早退天数'},
+			{field: 'not_signed', title: '未打卡次数'},
+			{field: 'deduct_money', title: '早退、迟到扣除金额'},
+			{field: 'leave_money', title: '请假扣除金额'},
+			{field: 'is_perfect', title: '是否全勤'},
+		]],
+		page: true,
+		limit: 30,
+		height: 'full-320',
+		
+		where: {
+			"monthy": "201811"
+		},
+		//ajax
+		contentType: 'application/json; charset=UTF-8',
+		method: 'post',
+		request: {
+			limitName: 'size'
+		},
+		response: {
+			statusCode: 200
+		},
+		text: '对不起，加载出现异常！'
+	});
+  
+	/*table.on('tool(OM-system-role)', function(obj){
+		var data = obj.data;
+		if(obj.event === 'del'){
+			layer.confirm('确定删除此管理员角色？', function(index){
+				layer.close(index);
+				
+				//数据封装
+				var req = {"id": data.id};
+				//执行 Ajax 后重载
+	          	$.ajax({
+					type: "POST",
+					url: "/manager/role/delete",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					async: false,
+					data: JSON.stringify(req),
+					success: function(data){
+						layer.open({
+	                        content: data.desc,
+	                        btn: ['确认'],
+	                        yes: function(index, layero) {
+	                        	layer.close(index);
+	                        	table.reload('OM-system-role', null);
+	                        }
+	                    });
+					}, error: function(){
+						location.hash='/system/404';
+					}
+		    	});
+			});
+		} else if(obj.event === 'edit'){
+			view('OM-module-temp').render('power/component/role-edit', data).done(function() {
+				//动态加载
+				form.render();
+				//提交监听
+				form.on('submit(OM-form-submit)', function(data2){
+					var field = data2.field;
+					
+					//获取checkbox[name='like']的值
+		            var arr = new Array();
+		            $("input:checkbox[name='m_power']:checked").each(function(i){
+		                arr[i] = $(this).val();
+		            });
+		           	field.power = arr.join(",");//将数组合并成字符串
+					
+					//提交
+		    		$.ajax({
+		    			type: "POST",
+						url: "/manager/role/update",
+						dataType:'json',//预期服务器返回的数据类型
+						contentType: "application/json; charset=utf-8",
+						async: false,
+						data: JSON.stringify(field),
+						success: function(data){
+							//直接跳转不做任何处理且提示
+							layer.open({
+	                  	      	content: data.desc,
+	                   	     	btn: ['确认'],
+	                   	     	yes: function(index, layero) {
+	                        		layer.close(index);
+	                        		//刷新当前页面
+	        			    		window.location.reload();
+	        			    		//修改路径，防止由于url 问题无法跳转的情况
+	        	    				window.history.pushState(null, null, '/start/index.html#/power/role');
+	                        	}
+	                   	 	});
+						}, error: function(){
+							location.hash='/system/404';
+						}
+		    		});
+		    		return false;
+				});
+			});
+		}
+	});*/
+	
+	//3节假日设置
+	table.render({
+		elem: '#OM-attendance-holiday',
+		url: '/manager/attendance/holiday/info',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field: 'id', title: '编号'},
+			{field: 'type', title: '人员'},
+			{field: 'name', title: '部门'},
+			{field: 'description', title: '描述'},
+			{field: 'years', title: '年份'},
+			{field: 'monthy', title: '月份'},
+			{field: 'date', title: '日期'},
+			{field: 'is_use', title: '是否启用'},
+			{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-toolbar-holiday'}
+		]],
+		page: true,
+		limit: 30,
+		height: 'full-320',
+		
+		//ajax
+		contentType: 'application/json; charset=UTF-8',
+		method: 'post',
+		request: {
+			limitName: 'size'
+		},
+		response: {
+			statusCode: 200
+		},
+		
+		text: '对不起，加载出现异常！'
+	});
+  
+	//系统操作日志_监听工具条
+	table.on('tool(OM-attendance-holiday)', function(obj){
+		var data = obj.data;
+		
+		if(obj.event === 'del'){
+			layer.confirm('确定删除此节假日？', function(index){
+				layer.close(index);
+				
+				//数据封装
+				var req = {"id": data.id};
+				//执行 Ajax 后重载
+				$.ajax({
+					type: "POST",
+					url: "/manager/attendance/holiday/delete",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					async: false,
+					data: JSON.stringify(req),
+					success: function(data){
+						layer.open({
+							content: data.msg,
+							btn: ['确认'],
+							yes: function(index, layero) {
+								layer.close(index);
+								table.reload('OM-attendance-holiday', null);
+							}
+						});
+					}, error: function(){
+						location.hash='/system/404';
+					}
+				});
+			});
+		}else if(obj.event === 'edit'){
+			view('OM-module-temp').render('attendance/component/holiday-edit', data).done(function() {
+				//初始化
+	    		/*$.ajax({
+	    			type: "POST",
+					url: "/manager/attendance/holiday/type/info",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify({}),
+					async: false,
+					success: function(data2){
+						var list = data2.data;
+						for(var i=0; i < list.length; i++) {
+							var obj = list[i];
+							if(type != null) {
+								$("#type").append("<option value="+obj.type+" selected>"+obj.type+"</option>");
+							}
+						}
+					}, error: function(){
+						location.hash='/system/404';
+					}
+	    		});*/
+	    		
+	    		//初始化
+	    		$("#name").append("<option value='0'>全体部门</option>");
+	    		$.ajax({
+	    			type: "POST",
+					url: "/manager/department/info",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify({}),
+					async: false,
+					success: function(data3){
+						var list = data3.data;
+						for(var i=0; i < list.length; i++) {
+							var obj = list[i];
+							if(data.name != '') {
+								$("#name").append("<option value="+obj.department_id+" selected>"+obj.name+"</option>");
+							}
+						}
+					}, error: function(){
+						location.hash='/system/404';
+					}
+	    		});
+				
+				//动态加载
+				form.render();
+				//提交监听
+				form.on('submit(OM-form-submit)', function(data2){
+					var field = data2.field;
+					
+					if(field.is_use == 'on') {
+		    			field.is_use = 1;
+		    		} else {
+		    			field.is_use = 0;
+		    		}
+					if(field.type == '全体员工') {
+		    			field.type = 0;
+		    		} else {
+		    			field.type = 1;
+		    		}
+					if(!(/^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/.test(field.date))){
+		    			layer.msg("请输入正确的日期！");
+		    			return false; 
+		    		}
+		    		
+					//获取checkbox[name='like']的值
+		            var arr = new Array();
+		            $("input:checkbox[name='m_power']:checked").each(function(i){
+		                arr[i] = $(this).val();
+		            });
+		           	field.power = arr.join(",");//将数组合并成字符串
+					
+					//提交
+		    		$.ajax({
+		    			type: "POST",
+						url: "/manager/attendance/holiday/update",
+						dataType:'json',//预期服务器返回的数据类型
+						contentType: "application/json; charset=utf-8",
+						async: false,
+						data: JSON.stringify(field),
+						success: function(data){
+							//直接跳转不做任何处理且提示
+							layer.open({
+	                  	      	content: data.msg,
+	                   	     	btn: ['确认'],
+	                   	     	yes: function(index, layero) {
+	                        		layer.close(index);
+	                        		//刷新当前页面
+	        			    		window.location.reload();
+	                        	}
+	                   	 	});
+						}, error: function(){
+							location.hash='/system/404';
+						}
+		    		});
+		    		return false;
+				});
+			});
+		}
+	});
+	
+	//4考勤方案
+	table.render({
+		elem: '#OM-attendance-workscheme',
+		url: '/manager/attendance/workscheme/info',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field: 'id', title: '编号'},
+			{field: 'depname', title: '部门'},
+			{field: 'name', title: '员工'},
+			{field: 'title', title: '标题'},
+			{field: 'description', title: '描述'},
+			{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-toolbar-workscheme'}
+		]],
+		page: true,
+		limit: 30,
+		height: 'full-320',
+		
+		//ajax
+		contentType: 'application/json; charset=UTF-8',
+		method: 'post',
+		request: {
+			limitName: 'size'
+		},
+		response: {
+			statusCode: 200
+		},
+		
+		text: '对不起，加载出现异常！'
+	});
+  
+	//系统操作日志_监听工具条
+	table.on('tool(OM-attendance-workscheme)', function(obj){
+		var data = obj.data;
+		
+		if(obj.event === 'del'){
+			layer.confirm('确定删除此类型吗？', function(index){
+				layer.close(index);
+				
+				//数据封装
+				var req = {"id": data.id};
+				//执行 Ajax 后重载
+	          	$.ajax({
+					type: "POST",
+					url: "/manager/attendance/workscheme/delete",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					async: false,
+					data: JSON.stringify(req),
+					success: function(data){
+						layer.open({
+	                        content: data.msg,
+	                        btn: ['确认'],
+	                        yes: function(index, layero) {
+	                        	layer.close(index);
+	                        	table.reload('OM-attendance-workscheme', null);
+	                        }
+	                    });
+					}, error: function(){
+						location.hash='/system/404';
+					}
+		    	});
+			});
+		}else if(obj.event === 'edit'){
+			view('OM-module-temp').render('attendance/component/work-scheme-edit', data).done(function() {
+				
+				//初始化
+	    		$("#name").append("<option value='0'>全体部门</option>");
+	    		$.ajax({
+	    			type: "POST",
+					url: "/manager/department/info",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify({}),
+					async: false,
+					success: function(data3){
+						var list = data3.data;
+						for(var i=0; i < list.length; i++) {
+							var obj = list[i];
+							if(data.name != '') {
+								$("#name").append("<option value="+obj.department_id+" selected>"+obj.name+"</option>");
+							}
+						}
+					}, error: function(){
+						location.hash='/system/404';
+					}
+	    		});
+				
+				//动态加载
+				form.render();
+				//提交监听
+				form.on('submit(OM-form-submit)', function(data2){
+					var field = data2.field;
+					
+					//获取checkbox[name='like']的值
+		            var arr = new Array();
+		            $("input:checkbox[name='m_power']:checked").each(function(i){
+		                arr[i] = $(this).val();
+		            });
+		           	field.power = arr.join(",");//将数组合并成字符串
+					
+					//提交
+		    		$.ajax({
+		    			type: "POST",
+						url: "/manager/attendance/workscheme/update",
+						dataType:'json',//预期服务器返回的数据类型
+						contentType: "application/json; charset=utf-8",
+						async: false,
+						data: JSON.stringify(field),
+						success: function(data){
+							//直接跳转不做任何处理且提示
+							layer.open({
+	                  	      	content: data.msg,
+	                   	     	btn: ['确认'],
+	                   	     	yes: function(index, layero) {
+	                        		layer.close(index);
+	                        		//刷新当前页面
+	        			    		window.location.reload();
+	        			    		//修改路径，防止由于url 问题无法跳转的情况
+	        	    				window.history.pushState(null, null, '/start/index.html#/attendance/work-scheme');
+	                        	}
+	                   	 	});
+						}, error: function(){
+							location.hash='/system/404';
+						}
+		    		});
+		    		return false;
+				});
+			});
+		}
+		
+	});
+	
+	//5请假类型
+	table.render({
+		elem: '#OM-attendance-leave',
+		url: '/manager/attendance/leave/info',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field: 'id', title: '编号'},
+			{field: 'title', title: '类型'},
+			{field: 'description', title: '描述'},
+			{field: 'amount', title: '使用时间'},
+			{field: 'date', title: '满多少天可以获取休假天数'},
+			{field: 'lower_limit', title: '请假时间下限'},
+			{field: 'upper_limit', title: '请假时间上限'},
+			{field: 'is_pay', title: '是否扣除薪酬'},
+			{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-toolbar-leave'}
+		]],
+		page: true,
+		limit: 30,
+		height: 'full-320',
+		
+		//ajax
+		contentType: 'application/json; charset=UTF-8',
+		method: 'post',
+		request: {
+			limitName: 'size'
+		},
+		response: {
+			statusCode: 200
+		},
+		
+		text: '对不起，加载出现异常！'
+	});
+  
+	//系统操作日志_监听工具条
+	table.on('tool(OM-attendance-leave)', function(obj){
+		var data = obj.data;
+		
+		if(data.is_del === 0 && obj.event === 'del'){
+			layer.msg("不可删除！");
+			return false;
+		}
+		
+		if(obj.event === 'edit'){
+			view('OM-module-temp').render('attendance/component/leave-edit', data).done(function() {
+				//动态加载
+				form.render();
+				//提交监听
+				form.on('submit(OM-form-submit)', function(data2){
+					var field = data2.field;
+					
+					if(field.is_pay == 'on') {
+		    			field.is_pay = 1;
+		    		} else {
+		    			field.is_pay = 0;
+		    		}
+		    		if(field.is_del == 'on') {
+		    			field.is_del = 1;
+		    		} else {
+		    			field.is_del = 0;
+		    		}
+		    		
+					//获取checkbox[name='like']的值
+		            var arr = new Array();
+		            $("input:checkbox[name='m_power']:checked").each(function(i){
+		                arr[i] = $(this).val();
+		            });
+		           	field.power = arr.join(",");//将数组合并成字符串
+					
+					//提交
+		    		$.ajax({
+		    			type: "POST",
+						url: "/manager/attendance/leave/update",
+						dataType:'json',//预期服务器返回的数据类型
+						contentType: "application/json; charset=utf-8",
+						async: false,
+						data: JSON.stringify(field),
+						success: function(data){
+							//直接跳转不做任何处理且提示
+							layer.open({
+	                  	      	content: data.msg,
+	                   	     	btn: ['确认'],
+	                   	     	yes: function(index, layero) {
+	                        		layer.close(index);
+	                        		//刷新当前页面
+	        			    		window.location.reload();
+	                        	}
+	                   	 	});
+						}, error: function(){
+							location.hash='/system/404';
+						}
+		    		});
+		    		return false;
+				});
+			});
+		}else if(obj.event === 'del') {
+			layer.confirm('确定删除此类型吗？', function(index){
+				layer.close(index);
+				
+				//数据封装
+				var req = {"id": data.id};
+				//执行 Ajax 后重载
+	          	$.ajax({
+					type: "POST",
+					url: "/manager/attendance/leave/delete",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					async: false,
+					data: JSON.stringify(req),
+					success: function(data){
+						layer.open({
+	                        content: data.msg,
+	                        btn: ['确认'],
+	                        yes: function(index, layero) {
+	                        	layer.close(index);
+	                        	table.reload('OM-attendance-leave', null);
+	                        }
+	                    });
+					}, error: function(){
+						location.hash='/system/404';
+					}
+		    	});
+			});
+		}
+		
+	});
+	
+	//6请假记录
+	table.render({
+		elem: '#OM-attendance-leave-record',
+		url: '/manager/attendance/leave/record/info',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field: 'id', title: '编号'},
+			{field: 'name', title: '姓名'},
+			{field: 'type', title: '类型'},
+			{field: 'monthy', title: '月份'},
+			{field: 'start_date', title: '开始时间'},
+			{field: 'end_date', title: '结束时间'},
+			{field: 'longtime', title: '请假时长(分钟)'},
+			{field: 'manager_check', title: '审核'},
+			{field: 'boss_check', title: 'boss审核'},
+			{field: 'add_date', title: '申请日期'},
+			{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-toolbar-leave-record'}
+		]],
+		page: true,
+		limit: 30,
+		height: 'full-320',
+		
+		where: {
+			"monthy": "201811"
+		},
+		//ajax
+		contentType: 'application/json; charset=UTF-8',
+		method: 'post',
+		request: {
+			limitName: 'size'
+		},
+		response: {
+			statusCode: 200
+		},
+		text: '对不起，加载出现异常！'
+	});
+  
+	table.on('tool(OM-attendance-leave-record)', function(obj){
+		var data = obj.data;
+		if(obj.event === 'del'){
+			layer.confirm('确定删除此管理员角色？', function(index){
+				layer.close(index);
+				
+				//数据封装
+				var req = {"id": data.id};
+				//执行 Ajax 后重载
+	          	$.ajax({
+					type: "POST",
+					url: "/manager/role/delete",
+					dataType:'json',//预期服务器返回的数据类型
+					contentType: "application/json; charset=utf-8",
+					async: false,
+					data: JSON.stringify(req),
+					success: function(data){
+						layer.open({
+	                        content: data.desc,
+	                        btn: ['确认'],
+	                        yes: function(index, layero) {
+	                        	layer.close(index);
+	                        	table.reload('OM-system-role', null);
+	                        }
+	                    });
+					}, error: function(){
+						location.hash='/system/404';
+					}
+		    	});
+			});
+		} else if(obj.event === 'edit'){
+			view('OM-module-temp').render('power/component/role-edit', data).done(function() {
+				//动态加载
+				form.render();
+				//提交监听
+				form.on('submit(OM-form-submit)', function(data2){
+					var field = data2.field;
+					
+					//获取checkbox[name='like']的值
+		            var arr = new Array();
+		            $("input:checkbox[name='m_power']:checked").each(function(i){
+		                arr[i] = $(this).val();
+		            });
+		           	field.power = arr.join(",");//将数组合并成字符串
+					
+					//提交
+		    		$.ajax({
+		    			type: "POST",
+						url: "/manager/role/update",
+						dataType:'json',//预期服务器返回的数据类型
+						contentType: "application/json; charset=utf-8",
+						async: false,
+						data: JSON.stringify(field),
+						success: function(data){
+							//直接跳转不做任何处理且提示
+							layer.open({
+	                  	      	content: data.desc,
+	                   	     	btn: ['确认'],
+	                   	     	yes: function(index, layero) {
+	                        		layer.close(index);
+	                        		//刷新当前页面
+	        			    		window.location.reload();
+	        			    		//修改路径，防止由于url 问题无法跳转的情况
+	        	    				window.history.pushState(null, null, '/start/index.html#/power/role');
+	                        	}
+	                   	 	});
+						}, error: function(){
+							location.hash='/system/404';
+						}
+		    		});
+		    		return false;
+				});
+			});
+		}
+	});
+	
+	exports('attendance', {})
+});

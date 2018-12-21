@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyLeaveRecordMapper">
+
+	<!-- 通过第三方用户id查询用户请假信息 -->
+	<select id="getByUserId" resultType="com.hxhy.model.po.HxhyLeaveRecord">
+		SELECT hlr.start_date, hlr.end_date, hlr.longtime
+		FROM hxhy_leave_record hlr INNER JOIN hxhy_leave hl ON hlr.leave_id = hl.id
+		WHERE hlr.manager_check = 1 AND hlr.boss_check = 1 AND hlr.user_id = #{userId}
+			AND hlr.monthy = #{monthy} AND hl.is_pay = 0
+	</select>
+</mapper>

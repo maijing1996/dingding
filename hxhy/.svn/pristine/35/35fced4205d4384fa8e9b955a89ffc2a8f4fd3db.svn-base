@@ -1,0 +1,17 @@
+package com.hxhy.service;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhySupplementAttendanceMapper;
+import com.hxhy.model.po.HxhySupplementAttendance;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhySupplementAttendanceService extends BaseService<HxhySupplementAttendance, HxhySupplementAttendanceMapper> {
+
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+
+}

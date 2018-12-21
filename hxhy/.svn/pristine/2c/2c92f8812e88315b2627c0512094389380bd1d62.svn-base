@@ -1,0 +1,8 @@
+package com.hxhy.mapper;
+
+import com.hxhy.model.po.HxhyLeaveRecord;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyLeaveRecordMapper extends MyMapper<HxhyLeaveRecord> {
+
+}

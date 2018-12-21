@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: hxhy
+Implementation-Version: 1.0-SNAPSHOT
+Built-By: user
+Implementation-Vendor-Id: com
+Build-Jdk: 1.8.0_172
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+Main-Class: com.hxhy.Application
+

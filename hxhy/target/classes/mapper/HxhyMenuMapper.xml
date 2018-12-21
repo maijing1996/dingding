@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyMenuMapper">
+	
+	<resultMap type="com.hxhy.model.dto.MenuPackage" id="resMap">
+		<id column="num" property="num"/>
+		<result column="nickname" property="nickname"/>
+		<collection property="list" ofType="com.hxhy.model.dto.Menus">
+			<id column="id" property="id"/>
+			<result column="title" property="title"/>
+		</collection>
+	</resultMap>
+	
+	<!-- <resultMap type="com.hxhy.model.dto.Menu" id="menu">
+		<id column="num" property="num"/>
+		<result column="title" property="title"/>
+		<result column="name" property="name"/>
+		<result column="icon" property="icon"/>
+		<result column="is_turn" property="is_turn"/>
+		<collection property="list" ofType="com.hxhy.model.dto.MenuDetails">
+			<id column="id" property="id"/>
+			<result column="title2" property="title"/>
+			<result column="name2" property="name"/>
+			<result column="jump" property="jump"/>
+		</collection>
+	</resultMap> -->
+
+	<!-- 获得菜单列表 -->
+	<select id="menu" resultMap="resMap">
+		SELECT hm.id num, hm.title nickname, hms.id, hms.title
+		FROM hxhy_menu hm INNER JOIN hxhy_menu hms ON hm.id = hms.parent_id
+		ORDER BY hm.sequence ASC, hms.sequence ASC
+	</select>
+	
+	<!-- 获得菜单列表 -->
+	<!-- <select id="getMenu" resultMap="menu">
+		SELECT idm.title, idm.controller `name`, idm.ico icon, idms.title title2, CONCAT(idm.controller,'/',idms.controller) jump,
+			idms.controller name2, idm.is_turn
+		FROM idea_admin_menu idm LEFT JOIN idea_admin_menu idms ON idm.id = idms.parent_id AND idms.is_show = 1
+		WHERE idm.is_show = 1 AND idm.parent_id = 0
+		ORDER BY idm.sequence ASC, idms.sequence ASC, idms.id ASC
+	</select> -->
+</mapper>

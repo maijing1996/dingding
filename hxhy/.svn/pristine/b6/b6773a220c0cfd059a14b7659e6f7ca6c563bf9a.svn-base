@@ -1,0 +1,132 @@
+package com.hxhy.controller.manager.attendance;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.PageInfo;
+import com.hxhy.exception.BusinessException;
+import com.hxhy.model.common.BaseResponse;
+import com.hxhy.model.dto.Holiday;
+import com.hxhy.model.po.HxhyHoliday;
+import com.hxhy.service.HxhyDepartmentService;
+import com.hxhy.service.HxhyHolidayService;
+import com.hxhy.util.DateUtil;
+import com.hxhy.util.StringUtil;
+
+@Controller
+@ResponseBody
+@RequestMapping("/manager/attendance/holiday")
+public class HxhyHolidayController {
+
+	@Autowired
+	private HxhyHolidayService hxhyHolidayService;
+	
+	/**
+	 * 获得所有的假期信息
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/info", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse listInfo(@RequestBody Map<String, String> map) {
+		BaseResponse baseResponse = new BaseResponse();
+		if(map != null) {
+			if(map.get("monthy") != null) {
+				
+			}
+			PageInfo<Holiday> pageInfo = hxhyHolidayService.listInfo(StringUtil.strToInt(map.get("page")), StringUtil.strToInt(map.get("size")),
+					StringUtil.strToInt(map.get("is_use")), StringUtil.strToLong(map.get("departmentId")), StringUtil.strToInt(map.get("type")));
+			
+			if(pageInfo.getTotal() > 0) {
+				return baseResponse.setSuccessList(200, pageInfo.getList(), pageInfo.getTotal(), pageInfo.getPages(),
+						pageInfo.getPageNum(), pageInfo.getSize());
+			} else {
+				return baseResponse.setSuccess("没有数据");
+			}
+		} else {
+			return baseResponse.setError(403, "参数有误");
+		}
+	}
+	
+	/**
+	 * 添加节假日
+	 * @param hxhyHoliday
+	 * @return
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse save(@RequestBody HxhyHoliday hxhyHoliday) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		HxhyHoliday hxhyHoliday2 = new HxhyHoliday();
+		if(hxhyHoliday.getType() != null) {
+			hxhyHoliday2.setType(hxhyHoliday.getType());
+		}
+		if(hxhyHoliday.getDepartment_id() != null){
+			hxhyHoliday2.setDepartment_id(hxhyHoliday.getDepartment_id());
+		}
+		if(hxhyHoliday.getDescription() != null) {
+			hxhyHoliday2.setDescription(hxhyHoliday.getDescription());
+		}
+		if(hxhyHoliday.getDate() != null) {
+			hxhyHoliday2.setDate(hxhyHoliday.getDate());
+			hxhyHoliday2.setYears(DateUtil.getYear(hxhyHoliday.getDate()));
+			hxhyHoliday2.setMonthy(DateUtil.getYearMonthy2(hxhyHoliday.getDate(), DateUtil.FORMAT_YYYYMM));
+		}
+		hxhyHoliday2.setState(hxhyHoliday.getState());
+		hxhyHoliday2.setIs_use(hxhyHoliday.getIs_use());
+		hxhyHoliday2.setAdd_date(new Date());
+		boolean save = hxhyHolidayService.save(hxhyHoliday2);
+		if(save) {
+			return baseResponse.setSuccess("添加成功！", null);
+		}else {
+			return baseResponse.setError(405, "添加失败！");
+		}
+	}
+	
+	/**
+	 * 删除节假日
+	 * @return
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse delete(@RequestBody Map<String, String> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		hxhyHolidayService.deleteById(StringUtil.strToLong(map.get("id")));
+		return baseResponse.setSuccess("删除成功！", null);
+	}
+	
+	/**
+	 * 修改节假日信息
+	 * @param hxhyHoliday
+	 * @return
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse update(@RequestBody HxhyHoliday hxhyHoliday) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		
+		hxhyHolidayService.update(hxhyHoliday);
+		
+		return baseResponse.setSuccess("修改成功！", null);
+	}
+	
+	/**
+	 * 获取放假的人员
+	 * @return
+	 */
+	@RequestMapping(value = "/type/info", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse listTypeInfo() {
+		BaseResponse baseResponse = new BaseResponse();
+		
+		List<Holiday> list = hxhyHolidayService.listTypeInfo();
+		
+		return baseResponse.setSuccess("修改成功！", list);
+	}
+}

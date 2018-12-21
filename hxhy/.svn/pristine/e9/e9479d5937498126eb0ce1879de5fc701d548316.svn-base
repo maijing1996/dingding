@@ -1,0 +1,61 @@
+package com.hxhy.controller.manager.finance;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hxhy.model.common.BaseResponse;
+import com.hxhy.model.po.HxhyFinance;
+import com.hxhy.service.HxhyFinanceService;
+
+@RestController
+@ResponseBody
+@RequestMapping("/manager/finance/setting")
+public class FinanceSettingController {
+
+	@Autowired
+	private HxhyFinanceService hxhyFinanceService;
+
+	/**
+	 * 获得财务设置信息
+	 * 
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/info", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse listInfo() {
+		BaseResponse baseResponse = new BaseResponse();
+		HxhyFinance hxhyFinance = hxhyFinanceService.getById(1L);
+		return baseResponse.setSuccess(null, hxhyFinance);
+	}
+
+	/**
+	 * 修改财务设置信息
+	 * 
+	 * @param map
+	 * @return
+	 * @throws BusinessException
+	 */
+	/*@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse update(@RequestBody Map<String, String> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		HxhyFinance hxhyFinance = new HxhyFinance();
+		hxhyFinance.setId(StringUtil.strToLong(map.get("id")));
+		Double person_money = StringUtil.strToDouble(map.get("person_money"));
+		if (person_money != null) {
+			hxhyFinance.setPerson_money(person_money);
+		}
+		if (StringUtil.strToDouble(map.get("company_money")) != null) {
+			hxhyFinance.setCompany_money(StringUtil.strToDouble(map.get("company_money")));
+		}
+		if (StringUtil.strToInt(map.get("probation")) != null && RegexUtil.matches(RegexUtil.NUMBER_REGEX, map.get("probation"))
+				&& 0 < StringUtil.strToInt(map.get("probation"))) {
+			hxhyFinance.setProbation(StringUtil.strToInt(map.get("probation")));
+		}
+		hxhyFinanceService.update(hxhyFinance);
+
+		return baseResponse.setSuccess("修改成功！");
+	}*/
+}

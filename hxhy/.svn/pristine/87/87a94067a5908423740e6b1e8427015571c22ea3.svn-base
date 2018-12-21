@@ -1,0 +1,31 @@
+package com.hxhy.controller.manager.finance;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.hxhy.model.common.BaseResponse;
+import com.hxhy.model.po.HxhyRevenue;
+import com.hxhy.service.HxhyRevenueService;
+
+@Controller
+@ResponseBody
+@RequestMapping("/manager/finance/revenue")
+public class RevenueController {
+
+	@Autowired
+	private HxhyRevenueService hxhyRevenueService;
+	
+	@RequestMapping(value = "/info", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public BaseResponse listInfo(@RequestBody Map<String, String> map) {
+		BaseResponse baseResponse = new BaseResponse();
+		List<HxhyRevenue> list = hxhyRevenueService.getAll(null, null);
+		return baseResponse.setSuccessList(200, list, list.size(), 0, 0, 20);
+	}
+}

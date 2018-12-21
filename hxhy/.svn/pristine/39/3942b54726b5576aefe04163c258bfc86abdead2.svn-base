@@ -1,0 +1,14 @@
+package com.hxhy.mapper;
+
+import java.util.List;
+
+import com.hxhy.model.dto.RoleInfo;
+import com.hxhy.model.po.HxhyRole;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyRoleMapper extends MyMapper<HxhyRole> {
+
+	List<RoleInfo> listInfo();
+
+	List<HxhyRole> listAllInfo();
+}

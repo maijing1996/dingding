@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyManagerMapper">
+
+	<select id="login" resultType="com.hxhy.model.po.HxhyManager">
+		SELECT id, account, passwd, role_id, user_id, name, is_alter, is_work, is_attendance, add_date
+		FROM hxhy_manager
+		WHERE account = #{account} AND passwd = #{passwd}
+	</select>
+</mapper>

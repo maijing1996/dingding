@@ -1,0 +1,15 @@
+package com.hxhy.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.hxhy.model.dto.AttendanceRecord;
+import com.hxhy.model.po.HxhyAttendance;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyAttendanceMapper extends MyMapper<HxhyAttendance> {
+
+	List<AttendanceRecord> listInfo(@Param("userId") String userId,
+			@Param("departmentId") Long departmentId, @Param("nickname") String nickname, @Param("monthy") String monthy);
+}

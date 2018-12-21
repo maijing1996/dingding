@@ -1,0 +1,88 @@
+package com.hxhy.controller.manager.confine;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.PageInfo;
+import com.hxhy.exception.BusinessException;
+import com.hxhy.model.common.BaseResponse;
+import com.hxhy.model.dto.OperationLog;
+import com.hxhy.model.po.HxhyOperationLog;
+import com.hxhy.service.HxhyOperationLogService;
+import com.hxhy.util.RegexUtil;
+import com.hxhy.util.StringUtil;
+
+@Controller
+@ResponseBody
+@RequestMapping("/manager/confine/log")
+public class LogController {
+
+	@Autowired
+	private HxhyOperationLogService hxhyOperationLogService;
+	
+	/**
+	 * 获得日志信息
+	 * @param id
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value="/info", method=RequestMethod.POST, produces="application/json;charset=utf-8")
+	public BaseResponse listInfo(@RequestBody Map<String, String> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		PageInfo<OperationLog> pageInfo = hxhyOperationLogService.listInfo(StringUtil.strToInt(map.get("page")), StringUtil.strToInt(map.get("size")),
+				StringUtil.strToInt(map.get("state")), StringUtil.strToInt(map.get("type")));
+		if(pageInfo.getTotal() != 0) {
+			return baseResponse.setSuccessList(200, pageInfo.getList(), pageInfo.getTotal());
+		} else {
+			return baseResponse.setSuccess("没有数据！");
+		}
+	}
+	
+	/**
+	 * 删除单个系统操作日志
+	 * @param ids
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value="/delete", method=RequestMethod.POST, produces="application/json;charset=utf-8")
+	public BaseResponse delete(@RequestBody Map<String, Long> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		if(map.get("id") != null) {
+			boolean boo = hxhyOperationLogService.deleteById(map.get("id"));
+			if(boo) {
+				return baseResponse.setSuccess("删除系统操作日志成功！");
+			} else {
+				return baseResponse.setError(403, "删除系统操作日志失败！");
+			}
+		} else {
+			return baseResponse.setError(403, "操作对象不明确！");
+		}
+	}
+	
+	/**
+	 * 批量删除系统操作日志
+	 * @param ids
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value="/deletes", method=RequestMethod.POST, produces="application/json;charset=utf-8")
+	public BaseResponse deletes(@RequestBody Map<String, String> map) throws BusinessException {
+		BaseResponse baseResponse = new BaseResponse();
+		if(map.get("ids") != null && RegexUtil.matches(RegexUtil.IDS_REGEX, map.get("ids"))) {
+			boolean boo = hxhyOperationLogService.deleteByIds(map.get("ids"));
+			if(boo) {
+				return baseResponse.setSuccess("删除系统操作日志成功！", null);
+			} else {
+				return baseResponse.setError(403, "删除系统操作日志失败！");
+			}
+		} else {
+			return baseResponse.setError(403, "操作对象不明确！");
+		}
+	}
+}

@@ -1,0 +1,26 @@
+package com.hxhy.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhyDepartmentMapper;
+import com.hxhy.model.po.HxhyDepartment;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyDepartmentService extends BaseService<HxhyDepartment, HxhyDepartmentMapper> {
+
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+
+	/**
+	 * 查询所有的部门
+	 * @return
+	 */
+	public List<HxhyDepartment> listDepartmentInfo() {
+		return mapper.listDepartmentInfo();
+	}
+}

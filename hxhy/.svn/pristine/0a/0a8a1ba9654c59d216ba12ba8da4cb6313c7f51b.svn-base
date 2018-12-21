@@ -1,0 +1,115 @@
+
+
+<title>网站用户</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a>主页</a>
+    <a><cite>资金结算</cite></a>
+    <a href="javascript:;" layadmin-event="refresh"><cite>基本设置</cite></a>
+  </div>
+</div>
+
+<div class="layui-main layui-form" id="ones">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<div class="layui-tab layui-tab-card" lay-filter="test1">
+				<ul class="layui-tab-title">
+					<li class="layui-this">基本设置</li>
+				</ul>
+				<form class="layui-tab-content">
+					<script type="text/html" template lay-url="/manager/finance/setting/info" lay-type="post">
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">公司缴纳的公积金：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="company_money" class="layui-input" value="{{d.data.company_money}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux"></div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 个人缴纳的公积金：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="person_money" datatype="*" nullmsg="个人缴纳的公积金为空!" placeholder="请输入个人缴纳的公积金金额" class="layui-input" value="{{d.data.person_money}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux"></div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 试用期：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="probation" datatype="*" nullmsg="试用期为空!" placeholder="请输入试用期时间" class="layui-input" value="{{d.data.probation}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux">月</div>
+						</div>
+						<div class="layui-form-item" style="border: 0;">
+							<div class="layui-input-block">
+								<button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-submit">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+						</div>
+					</script>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- <script>
+	layui.use(['admin', 'form', 'upload'], function(){
+		var $ = layui.$,
+	  	form = layui.form,
+	  	admin = layui.admin,
+	  	upload = layui.upload;
+		
+		//上传头像
+  		upload.render({
+    		elem: '#layuiadmin-upload-file',
+    		url: '/upload',
+    		accept: 'images',
+    		method: 'get',
+    		acceptMime: 'image/*',
+    		done: function(res){
+    			console.log(res);
+      			$(this.item).prev("div").children("input").val(res.url);
+      			$("#pic2").attr("src",res.file);
+      			//动态加载
+    			form.render();
+    		}
+  		});
+		
+		form.render();
+		
+	  	//
+	  	form.on('submit(LAY-user-front-submit)', function(data){
+    		var field = data.field;
+    		console.log(field);
+    		$.ajax({
+    			type: "POST",
+				url: "/manager/wechat/config/update",
+				dataType:'json',//预期服务器返回的数据类型
+				contentType: "application/json; charset=utf-8",
+				async: false,
+				data: JSON.stringify(field),
+				success: function(data){
+					layer.open({
+                        content: data.desc,
+                        btn: ['确认'],
+                        yes: function(index, layero) {
+                        	layer.close(index);
+                        }
+                    });
+				}, error: function(){
+					location.hash='/system/404';
+				}
+    		});
+  		});
+	});
+</script> -->
+
+
+
+
+
+
+
+

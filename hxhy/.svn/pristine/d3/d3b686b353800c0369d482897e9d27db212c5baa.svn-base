@@ -1,0 +1,12 @@
+package com.hxhy.mapper;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.hxhy.model.po.HxhyManager;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyManagerMapper extends MyMapper<HxhyManager> {
+
+	HxhyManager login(@Param("account") String account, @Param("passwd") String passwd);
+
+}

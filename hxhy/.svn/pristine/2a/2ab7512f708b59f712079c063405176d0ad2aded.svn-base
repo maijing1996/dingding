@@ -1,0 +1,72 @@
+server:
+    port: 80
+    #指定发布的目录
+    context-path: /
+    error:
+      #always,on-trace-param
+      include-stacktrace: always
+https:
+    port: 443
+
+logging:
+    config: classpath:logback-spring.xml
+
+multipart.max-file-size: 50Mb
+multipart.max-request-size: 100Mb
+
+#自定义配置    
+com.hxhy:
+    site: #冒号后面必须带一个空格
+        host: http://www.usambl.com
+        #静态资源服务器
+        staticHost: http://www.usambl.com
+        corpid: dingx6jbyrsjplxxqzh4
+        corpsecret: XTo6umwtC3uktecDdWsIcI_BxEFkPSiy19-lNeSUNstbmpFakIfwpf_6vI5ci4nS
+spring:
+    aop.proxy-target-class: false
+    http:
+        encoding:
+            # the encoding of HTTP requests/responses
+            charset: utf8
+            # enable http encoding support
+            enabled: true
+    datasource:
+        name: dingding
+        url: jdbc:mysql://rm-wz928a9jr690875b7qo.mysql.rds.aliyuncs.com/dingding?useUnicode=true&amp;characterEncoding=utf8
+        username: hxhy
+        password: hxhy123321!@#
+        
+        # 使用druid数据源
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        filters: stat
+        maxActive: 20
+        initialSize: 1
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+        connectionInitSqls: set names utf8mb4
+    mvc:
+        view:
+            prefix: /static/
+            suffix: .html
+        static-path-pattern: /**
+    #freemarker:
+        #cache: false
+        #request-context-attribute: request
+        #suffix: .html
+    #thymeleaf:
+      #cache: false
+      #template-resolver-order: 0
+    redis:
+        host: 127.0.0.1
+        password: 
+        notify-keyspace-events: true
+        port: 6379

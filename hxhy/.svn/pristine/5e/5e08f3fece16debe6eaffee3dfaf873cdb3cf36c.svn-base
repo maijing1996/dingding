@@ -1,0 +1,14 @@
+package com.hxhy.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.hxhy.model.dto.WorkScheme;
+import com.hxhy.model.po.HxhyHoliday;
+import com.hxhy.util.MyMapper;
+
+public interface HxhyHolidayMapper extends MyMapper<HxhyHoliday> {
+
+	List<WorkScheme> listInfo(@Param("userId") String userId, @Param("departmentId") Long departmentId);
+}

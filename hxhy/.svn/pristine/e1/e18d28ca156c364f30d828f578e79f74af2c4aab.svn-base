@@ -1,0 +1,151 @@
+package com.hxhy.model.common;
+
+import java.io.Serializable;
+
+public class BaseResponse  implements Serializable  {
+	
+	private static final long serialVersionUID = -940795926263067880L;
+
+	//code：200--正确返回，204--正确处理，但是不返回任何实体，401--请重新登录，403--参数有误
+	private String name;//名称，有需要的时候返回
+	private Object data;//结果
+	private String msg;//描述
+	private int code = -99999;//描述编号
+	private long count;//总记录数
+    private int pages;//总页数
+    private int page;//当前页
+    private int limit;//当前页的数量
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Object getData() {
+		return data;
+	}
+	public void setData(Object data) {
+		this.data = data;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	public int getCode() {
+		return code;
+	}
+	public void setCode(int code) {
+		this.code = code;
+	}
+	public long getCount() {
+		return count;
+	}
+	public void setCount(long count) {
+		this.count = count;
+	}
+	public int getPages() {
+		return pages;
+	}
+	public void setPages(int pages) {
+		this.pages = pages;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getLimit() {
+		return limit;
+	}
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+	
+	/**
+	 * 操作成功时的返回对象
+	 * @param code
+	 * @param data
+	 * @return
+	 */
+	public BaseResponse setSuccess(String msg, Object data) {
+		this.data = data;
+		this.msg = null;
+		this.name = null;
+		this.code = 200;
+		return this;
+	}
+	
+	/**
+	 * 正确放回不返回实体
+	 * @param code
+	 * @param data
+	 * @return
+	 */
+	public BaseResponse setSuccess(String msg) {
+		this.data = null;
+		this.msg = msg;
+		this.name = null;
+		this.code = 204;
+		return this;
+	}
+	
+	/**
+	 * 操作成功时的返回列表
+	 * @param code
+	 * @param data
+	 * @param total
+	 * @param pages
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public BaseResponse setSuccessList(int code, Object data, long count, int pages, int page, int limit) {
+		this.data = data;
+		this.msg = null;
+		this.name = null;
+		this.code = code;
+		this.count = count;
+		this.pages = pages;
+		this.page = page;
+		this.limit = limit;
+		return this;
+	}
+	
+	/**
+	 * 操作失败时的返回
+	 * @param code
+	 * @param msg
+	 * @return
+	 */
+	public BaseResponse setError(int code, String msg) {
+		this.code = code;
+		this.msg = msg;
+		this.data = null;
+		this.name = null;
+		return this;
+	}
+	
+	/**
+	 * 自行设置返回结果
+	 * @param code
+	 * @param msg
+	 * @param data
+	 * @param name
+	 * @return
+	 */
+	public BaseResponse setValue(int code, String msg, Object data, String name, long count, int pages, int page, int limit) {
+		this.code = code;
+		this.msg = msg;
+		this.data = data;
+		this.name = name;
+		this.count = count;
+		this.pages = pages;
+		this.page = page;
+		this.limit = limit;
+		return this;
+	}
+}

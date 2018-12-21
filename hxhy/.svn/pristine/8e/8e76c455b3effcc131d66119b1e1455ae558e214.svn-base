@@ -1,0 +1,45 @@
+package com.hxhy.model.po;
+
+import java.util.Date;
+
+import com.hxhy.model.common.BaseEntity;
+
+public class HxhyDelayWorkScheme extends BaseEntity {
+
+	private String title;
+	private String description;
+	private String work_date;
+	private Integer delay_time;
+	private Date add_date;
+	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getWork_date() {
+		return work_date;
+	}
+	public void setWork_date(String work_date) {
+		this.work_date = work_date;
+	}
+	public Integer getDelay_time() {
+		return delay_time;
+	}
+	public void setDelay_time(Integer delay_time) {
+		this.delay_time = delay_time;
+	}
+	public Date getAdd_date() {
+		return add_date;
+	}
+	public void setAdd_date(Date add_date) {
+		this.add_date = add_date;
+	}
+}

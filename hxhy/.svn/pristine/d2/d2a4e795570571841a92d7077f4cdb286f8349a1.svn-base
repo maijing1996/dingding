@@ -1,0 +1,190 @@
+package com.hxhy.service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.hxhy.mapper.HxhyAttendanceStatisticsMapper;
+import com.hxhy.model.dto.AttendanceStatistics;
+import com.hxhy.model.po.HxhyAttendance;
+import com.hxhy.model.po.HxhyAttendanceStatistics;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyAttendanceStatisticsService extends BaseService<HxhyAttendanceStatistics, HxhyAttendanceStatisticsMapper> {
+
+	private Logger logger = LoggerFactory.getLogger(HxhyAttendanceStatisticsService.class);
+	
+	@Autowired
+	private HxhyAttendanceService hxhyAttendanceService;
+	
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+	
+	/**
+	 * 获得用户考勤统计信息
+	 * 
+	 * @param page
+	 * @param size
+	 * @param userId
+	 * @param monthy
+	 * @return
+	 */
+	public PageInfo<AttendanceStatistics> statistics(Integer page, Integer size, String monthy, String userId) {
+		if(page != null && size != null) {
+			PageHelper.startPage(page, size);
+		} else {
+			PageHelper.startPage(1, 40);
+		}
+		
+		List<AttendanceStatistics> list = mapper.statistics(userId, monthy);
+		PageInfo<AttendanceStatistics> pageInfo = new PageInfo<AttendanceStatistics>(list);
+		return pageInfo;
+	}
+	
+	/**
+	 * 考勤统计，没人每月一条，可以统计多次，以最后统计为准
+	 * 
+	 * @param monthy
+	 * @return
+	 */
+	public String attendanceStatistics(String monthy) {
+		
+		try {
+			//获得考勤统计信息，如果存在则覆盖，不存在则不处理
+			HxhyAttendanceStatistics hxhyAttendanceStatistics = new HxhyAttendanceStatistics();
+			hxhyAttendanceStatistics.setMonthy(monthy);
+			List<HxhyAttendanceStatistics> statistiscList = this.getAll(hxhyAttendanceStatistics, null);
+			
+			//获得用户考勤信息
+			HxhyAttendance hxhyAttendance = new HxhyAttendance();
+			hxhyAttendance.setMonthy(monthy);
+			List<HxhyAttendance> attendanceList = hxhyAttendanceService.getAll(hxhyAttendance, "user_id ASC");
+			
+			//开始核对统计，新增加入列表，修改直接更新，因为没有批量更新的操作
+			List<HxhyAttendanceStatistics> saveStatisticsList = new ArrayList<HxhyAttendanceStatistics>();
+			if(attendanceList.size() > 0) {
+				//逻辑涉及的基础参数
+				String userId = null;
+				int earlyDate=0, earlyTime=0, notSigned=0, leaveTime=0, leaveDate=0, lateDate=0, lateTime=0, workDate=0;
+				HxhyAttendanceStatistics hxhyAttendanceStatistics2 = new HxhyAttendanceStatistics();
+				for(HxhyAttendance hxhyAttendance2 : attendanceList) {
+					
+					if(userId == null) {
+						userId = hxhyAttendance2.getUser_id();
+						hxhyAttendanceStatistics2.setUser_id(userId);
+					}
+					//判断是不是同一个人
+					if(userId.equals(hxhyAttendance2.getUser_id())) {
+						//统计处理
+						if(!"SYSTEM".equals(hxhyAttendance2.getSource_type())) {
+							if("OnDuty".equals(hxhyAttendance2.getCheck_type())) {
+								workDate++;
+							}
+							//时间结果（Normal:正常;Early:早退; Late:迟到;SeriousLate:严重迟到；Absenteeism:旷工迟到； NotSigned:未打卡,leave：请假）
+							if("Early".equals(hxhyAttendance2.getTime_result())) {
+								
+								earlyDate++;
+								earlyTime = earlyTime + hxhyAttendance2.getTimelong();
+							} else if("NotSigned".equals(hxhyAttendance2.getTime_result())) {
+								
+								notSigned++;
+							} else if("leave".equals(hxhyAttendance2.getTime_result())) {
+								
+								leaveDate++;
+								leaveTime = leaveTime + hxhyAttendance2.getTimelong();
+							} else if("Late".equals(hxhyAttendance2.getTime_result()) || "SeriousLate".equals(hxhyAttendance2.getTime_result())
+									|| "Absenteeism".equals(hxhyAttendance2.getTime_result())) {
+								
+								lateDate++;
+								lateTime = lateTime + hxhyAttendance2.getTimelong();
+							}
+						}
+					} else {
+						//参数封装
+						hxhyAttendanceStatistics2.setMonthy(monthy);
+						hxhyAttendanceStatistics2.setEarly_date(earlyDate);
+						hxhyAttendanceStatistics2.setEarly_time(earlyTime);
+						hxhyAttendanceStatistics2.setLate_date(lateDate);
+						hxhyAttendanceStatistics2.setLate_time(lateTime);
+						hxhyAttendanceStatistics2.setLeave_date(leaveDate);
+						hxhyAttendanceStatistics2.setLeave_time(leaveTime);
+						hxhyAttendanceStatistics2.setNot_signed(notSigned);
+						hxhyAttendanceStatistics2.setWork_date(workDate);
+						hxhyAttendanceStatistics2.setAdd_date(new Date());
+						
+						//保存或更新处理
+						if(statistiscList.size() > 0) {
+							boolean boo = true;
+							for(HxhyAttendanceStatistics hxhyAttendanceStatistics3 : statistiscList) {
+								if(hxhyAttendanceStatistics3.getUser_id().equals(hxhyAttendanceStatistics2.getUser_id())) {
+									
+									boo = false;
+									hxhyAttendanceStatistics2.setId(hxhyAttendanceStatistics3.getId());
+									this.update(hxhyAttendanceStatistics2);
+								}
+							}
+							
+							if(boo) {
+								saveStatisticsList.add(hxhyAttendanceStatistics2);
+							}
+						} else {
+							saveStatisticsList.add(hxhyAttendanceStatistics2);
+						}
+						
+						//重置
+						earlyDate=0; earlyTime=0; notSigned=0; leaveTime=0; leaveDate=0; lateDate=0; lateTime=0; workDate=0;
+						hxhyAttendanceStatistics2 = new HxhyAttendanceStatistics();
+						userId = hxhyAttendance2.getUser_id();
+						hxhyAttendanceStatistics2.setUser_id(userId);
+						
+						//统计处理
+						if(!"SYSTEM".equals(hxhyAttendance2.getSource_type())) {
+							if("OnDuty".equals(hxhyAttendance2.getCheck_type())) {
+								workDate++;
+							}
+							//时间结果（Normal:正常;Early:早退; Late:迟到;SeriousLate:严重迟到；Absenteeism:旷工迟到； NotSigned:未打卡,leave：请假）
+							if("Early".equals(hxhyAttendance2.getTime_result())) {
+								
+								earlyDate++;
+								earlyTime = earlyTime + hxhyAttendance2.getTimelong();
+							} else if("NotSigned".equals(hxhyAttendance2.getTime_result())) {
+								
+								notSigned++;
+							} else if("leave".equals(hxhyAttendance2.getTime_result())) {
+								
+								leaveDate++;
+								leaveTime = leaveTime + hxhyAttendance2.getTimelong();
+							} else if("Late".equals(hxhyAttendance2.getTime_result()) || "SeriousLate".equals(hxhyAttendance2.getTime_result())
+									|| "Absenteeism".equals(hxhyAttendance2.getTime_result())) {
+								
+								lateDate++;
+								lateTime = lateTime + hxhyAttendance2.getTimelong();
+							}
+						}
+					}
+				}
+				
+				//是否需要保存操作
+				if(saveStatisticsList.size() > 0) {
+					this.insertList(saveStatisticsList);
+				}
+				return null;
+			} else {
+				return "没有考勤信息";
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return "系统出错";
+		}
+	}
+}

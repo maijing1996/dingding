@@ -1,0 +1,29 @@
+package com.hxhy.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhyRoleMapper;
+import com.hxhy.model.dto.RoleInfo;
+import com.hxhy.model.po.HxhyRole;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyRoleService extends BaseService<HxhyRole, HxhyRoleMapper> {
+
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+
+	/**
+	 * 查询所有员工信息
+	 * @return
+	 */
+	public List<RoleInfo> listInfo() {
+		
+		return mapper.listInfo();
+	}
+
+}

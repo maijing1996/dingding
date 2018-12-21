@@ -1,0 +1,76 @@
+
+<div class="layui-main layui-form">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<form class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">补卡记录</li>
+				</ul>
+				<div class="layui-tab-content">
+					<script type="text/html" template>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 部门：</label>
+							<div class="layui-input-inline">
+								<input type="text" id="department_id" disabled="disabled" name="departmentId" value="{{ d.params.department_id || '' }}" placeholder="" class="layui-input">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 姓名：</label>
+							<div class="layui-input-inline">
+								<input type="text" id="user_id" disabled="disabled" name="user_id" value="{{ d.params.user_id || '' }}" placeholder="" class="layui-input">
+							</div>		
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 打卡时间：</label>
+							<div class="layui-input-inline">
+								<input type="text" id="user_check_time" disabled="disabled" name="user_check_time" value="{{ d.params.supplement_date || '' }}" placeholder="" class="layui-input">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">是否通过：</label>
+							<div class="layui-input-block" id="is_audit">
+								
+							</div>
+						</div>
+
+						<input name="id" type="hidden" id="id" value="{{ d.params.id || '' }}">
+					</script>
+					<div class="layui-form-item" style="border: 0;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="OM-form-submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	layui.use(['admin', 'form', 'upload'], function(){
+ 	 	var $ = layui.$,
+  		form = layui.form,
+  		upload = layui.upload;
+ 	 	
+  		//上传头像
+  		upload.render({
+    		elem: '#layuiadmin-upload-useradmin',
+    		url: '/upload',
+    		accept: 'images',
+    		method: 'get',
+    		acceptMime: 'image/*',
+    		done: function(res){
+    			console.log(res);
+      			$(this.item).prev("div").children("input").val(res.url);
+      			$("#pic2").attr("src",res.file);
+      			//动态加载
+    			form.render();
+    		}
+  		});
+	})
+</script>
+

@@ -1,0 +1,33 @@
+package com.hxhy.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhyWorkTimeMapper;
+import com.hxhy.model.po.HxhyWorkTime;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyWorkTimeService extends BaseService<HxhyWorkTime, HxhyWorkTimeMapper> {
+
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+
+	/**
+	 * 通过部门id获得工作时间信息
+	 * 如果该部门没有特有的工作时间安排，就使用默认的时间安排
+	 * 
+	 * @param departmentId
+	 * @return
+	 */
+	public List<HxhyWorkTime> getByDepartmentId(Long departmentId) {
+		List<HxhyWorkTime> list = mapper.getByDepartmentId(departmentId);
+		if(list == null || list.isEmpty()) {
+			list = mapper.getByDepartmentId(1L);
+		}
+		return list;
+	}
+}

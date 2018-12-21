@@ -1,0 +1,89 @@
+
+<div class="layui-main layui-form">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<form class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">修改请假类型</li>
+				</ul>
+				<div class="layui-tab-content">
+					
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 人员：</label>
+							<div class="layui-input-inline">
+								<select name="type" id="type">
+									<option value="全体员工" selected>全体员工</option>
+									<option value="个体员工" selected>个体员工</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 部门：</label>
+							<div class="layui-input-inline">
+								<select name="department_id" id="name"></select>
+							</div>
+						</div>
+						<script type="text/html" template>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 描述：</label>
+							<div class="layui-input-inline">
+								<textarea name="description" placeholder="请输入描述" class="layui-textarea">{{ d.params.description || '' }}</textarea>
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">日期：</label>
+							<div class="layui-input-inline" id = "time">
+								<input type="text" id="date" name="date" value="{{ d.params.date || '' }}" placeholder="请输入日期" class="layui-input">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">是否启用：</label>
+							<div class="layui-input-block">
+								{{# if(d.params.is_use == '否'){ }}
+									<input type="checkbox" name="is_use" lay-skin="switch">
+								{{#} else { }}
+									<input type="checkbox" name="is_use" lay-skin="switch" checked>
+								{{#} }}
+							</div>
+						</div>
+						<input name="id" type="hidden" value="{{ d.params.id || '' }}">
+					</script>
+					<div class="layui-form-item" style="border: 0;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="OM-form-submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	layui.use(['admin', 'form', 'upload'], function(){
+ 	 	var $ = layui.$,
+  		form = layui.form,
+  		upload = layui.upload;
+ 	 	
+  		//上传头像
+  		upload.render({
+    		elem: '#layuiadmin-upload-useradmin',
+    		url: '/upload',
+    		accept: 'images',
+    		method: 'get',
+    		acceptMime: 'image/*',
+    		done: function(res){
+    			console.log(res);
+      			$(this.item).prev("div").children("input").val(res.url);
+      			$("#pic2").attr("src",res.file);
+      			//动态加载
+    			form.render();
+    		}
+  		});
+	})
+</script>
+

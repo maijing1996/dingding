@@ -1,0 +1,127 @@
+
+
+<title>网站用户</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a>主页</a>
+    <a><cite>考勤管理</cite></a>
+    <a href="javascript:;" layadmin-event="refresh"><cite>考勤记录</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="OM-module-temp">
+  <div class="layui-card">
+  
+  	 <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+   	   <div class="layui-form-item">
+	  	<div class="layui-inline">
+	      <label class="layui-form-label">用户昵称：</label>
+	      <div class="layui-input-block">
+	        <input type="text" name="nickname" placeholder="请输入" autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">部门：</label>
+	      <div class="layui-input-block">
+	        <select name="departmentId" id="department_id">
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">月份：</label>
+	      <div class="layui-input-block">
+	        <select name="monthy" id="monthy">
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+	        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+	      </button>
+	    </div>
+	   </div>
+	</div> 
+  
+    <div class="layui-card-body">
+      <table id="OM-attendance-record" lay-filter="OM-attendance-record"></table>
+      <script type="text/html" id="table-tookbar-record">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>补卡查看</a>
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>
+	layui.use('attendance', layui.factory('attendance')).use(['admin', 'attendance', 'table'], function(){
+		var $ = layui.$,
+		admin = layui.admin,
+		view = layui.view,
+		table = layui.table,
+		form = layui.form;
+		
+		//初始化
+		$("#department_id").append("<option value='' selected>全体部门</option>");
+		$.ajax({
+			type: "POST",
+			url: "/manager/confine/department/info",
+			dataType:'json',//预期服务器返回的数据类型
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({}),
+			async: false,
+			success: function(data3){
+				var list = data3.data;
+				for(var i=0; i < list.length; i++) {
+					var obj2 = list[i];
+					if(obj2.name != '') {
+						$("#department_id").append("<option value="+obj2.department_id+">"+obj2.name+"</option>");
+					}
+				}
+			}, error: function(){
+				location.hash='/system/404';
+			}
+		});
+		
+		$('#monthy').append("<option value='1' selected>所有月份</option>");
+		$.ajax({
+			type: "POST",
+			url: "/manager/attendance/record/statistics/monthy",
+			dataType:'json',//预期服务器返回的数据类型
+			contentType: "application/json; charset=utf-8",
+			async: false,
+			data: JSON.stringify({}),
+			success: function(data){
+				var monthy = null;
+				for(var i=0; i < data.data.length; i++) {
+					var obj = data.data[i];
+					$('#monthy').append("<option value="+obj.monthy+">"+obj.monthy+"</option>");
+				}
+			}, error: function(){
+				location.hash='/system/404';
+			}
+		});
+  		
+		form.render(null, 'layadmin-userfront-formlist');
+
+		//监听搜索
+		form.on('submit(LAY-user-front-search)', function(data){
+			var field = data.field;
+			 /* console.log(field); */
+			//执行重载
+			table.reload('OM-attendance-statistics', {
+	  			where: field
+			});
+		});
+		
+		form.render(null, 'layadmin-userfront-formlist');
+
+		//监听搜索
+		form.on('submit(LAY-user-front-search)', function(data){
+			var field = data.field;
+			//执行重载
+			table.reload('OM-attendance-record', {
+	  			where: field
+			});
+		});
+	});
+</script>

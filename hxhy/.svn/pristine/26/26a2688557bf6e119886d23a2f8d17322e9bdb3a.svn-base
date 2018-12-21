@@ -1,0 +1,48 @@
+package com.hxhy.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhyManagerMapper;
+import com.hxhy.model.dto.ManagerInfo;
+import com.hxhy.model.po.HxhyManager;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyManagerService extends BaseService<HxhyManager, HxhyManagerMapper> {
+
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+
+	/**
+	 * 管理员登入
+	 * 
+	 * @param account
+	 * @param passwd
+	 * @return
+	 */
+	public HxhyManager login(String account, String passwd) {
+
+		return mapper.login(account, passwd);
+	}
+
+	/**
+	 * 查询所有的管理员
+	 * 
+	 * @return
+	 */
+	public List<ManagerInfo> listInfo() {
+		return mapper.listInfo();
+	}
+
+	/**
+	 * 获得所有非超级管理员的职工信息
+	 * @return
+	 */
+	public List<HxhyManager> listEmployee() {
+		return mapper.listEmployee();
+	}
+}

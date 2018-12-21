@@ -1,0 +1,124 @@
+
+
+<title>网站用户</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a>主页</a>
+    <a><cite>财务管理</cite></a>
+    <a href="javascript:;" layadmin-event="refresh"><cite>员工信息</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="OM-module-temp">
+  <div class="layui-card">
+  	<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">员工名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">员工职位</label>
+          <div class="layui-input-block">
+            <select name="role_id" id="h_role_id"></select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">是否在职</label>
+          <div class="layui-input-block">
+            <select name="is_work">
+              <option value="">不限</option>
+              <option value="1">在职</option>
+              <option value="0">离职</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">所属部门</label>
+          <div class="layui-input-block">
+            <select name="department_id" id="h_department_id"></select>
+          </div>
+        </div>
+        
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-card-body">
+      <table id="OM-system-employee" lay-filter="OM-system-employee"></table>
+      <script type="text/html" id="table-toolbar-employee">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>
+	layui.use('finance', layui.factory('finance')).use(['admin', 'finance', 'table'], function(){
+		var $ = layui.$,
+		admin = layui.admin,
+		view = layui.view,
+		table = layui.table,
+		form = layui.form;
+
+		//初始化
+		$("#h_department_id").append("<option value='' selected>不限</option>");
+		$.ajax({
+			type: "POST",
+			url: "/manager/confine/department/info",
+			dataType:'json',//预期服务器返回的数据类型
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({}),
+			async: false,
+			success: function(data){
+				var list = data.data;
+				for(var i=0; i < list.length; i++) {
+					var obj = list[i];
+					if(obj.name != '') {
+						$("#h_department_id").append("<option value="+obj.department_id+">"+obj.name+"</option>");
+					}
+				}
+			}, error: function(){
+				location.hash='/system/404';
+			}
+		});
+		
+		$("#h_role_id").append("<option value='' selected>不限</option>");
+		$.ajax({
+			type: "POST",
+			url: "/manager/confine/role/info",
+			dataType:'json',//预期服务器返回的数据类型
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({}),
+			async: false,
+			success: function(data){
+				var list = data.data;
+				for(var i=0; i < list.length; i++) {
+					var obj = list[i];
+					if(obj.title != '') {
+						$("#h_role_id").append("<option value="+obj.id+">"+obj.title+"</option>");
+					}
+				}
+			}, error: function(){
+				location.hash='/system/404';
+			}
+		});
+		
+		form.render(null, 'layadmin-userfront-formlist');
+
+		//监听搜索
+		form.on('submit(LAY-user-front-search)', function(data){
+			var field = data.field;
+			//执行重载
+			table.reload('OM-system-employee', {
+	  			where: field
+			});
+		});
+	});
+</script>

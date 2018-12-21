@@ -1,0 +1,15 @@
+package com.hxhy;
+
+import java.util.Date;
+
+import com.hxhy.util.DateUtil;
+
+public class AppTest {
+
+	public static void main(String[] args) {
+
+		Date date = DateUtil.parseDate("201811", DateUtil.FORMAT_YYYYMM);
+		System.out.println(date);
+	}
+
+}

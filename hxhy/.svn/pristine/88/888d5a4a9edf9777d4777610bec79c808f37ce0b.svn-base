@@ -1,0 +1,141 @@
+package com.hxhy.model.po;
+
+import com.hxhy.model.common.BaseEntity;
+
+public class HxhyPayroll extends BaseEntity {
+	
+	private String name;//姓名
+	private Integer is_on_obj;//是否在职（0离职，1在职）
+	private Integer basic_wage;//基本工资
+	private Integer overtime_pay;//加班费
+	private Integer attendance_day;//每月的出勤天数
+	private Integer full_frequently_days;//满勤天数
+	private Integer bonus;//奖金
+	private Integer total;//小计
+	private Integer leave_of_absence;//请假天数
+	private Integer late;//迟到分钟
+	private Integer meal_fee;//餐费
+	private Integer subtotal;//扣除餐费等后的小计
+	private Integer back_pay;//补发工资
+	private Integer social_insurance;//social_insurance
+	private Integer reserved_fund;//公积金
+	private Integer individual_income_tax;//个税
+	private Integer net_amount;//实发金额
+	private Integer remark;//备注
+	private Integer is_regularization;//is_regularization
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Integer getIs_on_obj() {
+		return is_on_obj;
+	}
+	public void setIs_on_obj(Integer is_on_obj) {
+		this.is_on_obj = is_on_obj;
+	}
+	public Integer getBasic_wage() {
+		return basic_wage;
+	}
+	public void setBasic_wage(Integer basic_wage) {
+		this.basic_wage = basic_wage;
+	}
+	public Integer getOvertime_pay() {
+		return overtime_pay;
+	}
+	public void setOvertime_pay(Integer overtime_pay) {
+		this.overtime_pay = overtime_pay;
+	}
+	public Integer getAttendance_day() {
+		return attendance_day;
+	}
+	public void setAttendance_day(Integer attendance_day) {
+		this.attendance_day = attendance_day;
+	}
+	public Integer getFull_frequently_days() {
+		return full_frequently_days;
+	}
+	public void setFull_frequently_days(Integer full_frequently_days) {
+		this.full_frequently_days = full_frequently_days;
+	}
+	public Integer getBonus() {
+		return bonus;
+	}
+	public void setBonus(Integer bonus) {
+		this.bonus = bonus;
+	}
+	public Integer getTotal() {
+		return total;
+	}
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+	public Integer getLeave_of_absence() {
+		return leave_of_absence;
+	}
+	public void setLeave_of_absence(Integer leave_of_absence) {
+		this.leave_of_absence = leave_of_absence;
+	}
+	public Integer getLate() {
+		return late;
+	}
+	public void setLate(Integer late) {
+		this.late = late;
+	}
+	public Integer getMeal_fee() {
+		return meal_fee;
+	}
+	public void setMeal_fee(Integer meal_fee) {
+		this.meal_fee = meal_fee;
+	}
+	public Integer getSubtotal() {
+		return subtotal;
+	}
+	public void setSubtotal(Integer subtotal) {
+		this.subtotal = subtotal;
+	}
+	public Integer getBack_pay() {
+		return back_pay;
+	}
+	public void setBack_pay(Integer back_pay) {
+		this.back_pay = back_pay;
+	}
+	public Integer getSocial_insurance() {
+		return social_insurance;
+	}
+	public void setSocial_insurance(Integer social_insurance) {
+		this.social_insurance = social_insurance;
+	}
+	public Integer getReserved_fund() {
+		return reserved_fund;
+	}
+	public void setReserved_fund(Integer reserved_fund) {
+		this.reserved_fund = reserved_fund;
+	}
+	public Integer getIndividual_income_tax() {
+		return individual_income_tax;
+	}
+	public void setIndividual_income_tax(Integer individual_income_tax) {
+		this.individual_income_tax = individual_income_tax;
+	}
+	public Integer getNet_amount() {
+		return net_amount;
+	}
+	public void setNet_amount(Integer net_amount) {
+		this.net_amount = net_amount;
+	}
+	public Integer getRemark() {
+		return remark;
+	}
+	public void setRemark(Integer remark) {
+		this.remark = remark;
+	}
+	public Integer getIs_regularization() {
+		return is_regularization;
+	}
+	public void setIs_regularization(Integer is_regularization) {
+		this.is_regularization = is_regularization;
+	}
+	
+}

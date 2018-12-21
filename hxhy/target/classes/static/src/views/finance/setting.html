@@ -1,0 +1,267 @@
+
+
+<title>网站用户</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a>主页</a>
+    <a><cite>财务管理</cite></a>
+    <a href="javascript:;" layadmin-event="refresh"><cite>财务设置</cite></a>
+  </div>
+</div>
+
+<div class="layui-main layui-form" id="ones">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<div class="layui-tab layui-tab-card" lay-filter="test1">
+				<ul class="layui-tab-title">
+					<li class="layui-this">基本设置</li>
+				</ul>
+				<form class="layui-tab-content">
+					<script type="text/html" template lay-url="/manager/finance/setting/info" lay-type="post" lay-done="layui.data.done(d);">
+						<input type="hidden" class="layui-input" name="id" value="{{d.data.id}}">
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 公积金缴纳方式：</label>
+							<div class="layui-input-inline">
+								<select name="type" id="h_type"></select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 社保汇缴基数：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="social_security" value="{{d.data.social_security}}" lay-verify="required" placeholder="请输入公司缴纳的公积金" class="layui-input">
+							</div>
+							<div class="layui-form-mid layui-word-aux">元</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 公积金汇缴基数：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="personprovident_fund" value="{{d.data.provident_fund}}" lay-verify="required" placeholder="请输入个人缴纳的公积金金额" class="layui-input">
+							</div>
+							<div class="layui-form-mid layui-word-aux">元</div>
+						</div>
+						
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg1"></div>
+			              	<div class="layui-col-lg3">
+			                	<label class="layui-form-label"><span>单位应缴部分：</span></label>
+			              	</div>
+			            	<div class="layui-col-lg3">
+			                	<label class="layui-form-label"><span>个人应缴部分：</span></label>
+			              	</div>
+			            </div>
+			            
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg1">
+								<label class="layui-form-label">养老保险金：</label>
+							</div>
+			              	<div class="layui-col-lg3">
+			              		<div class="layui-input-inline">
+			                  		<input type="number" name="com_pension" value="{{d.data.com_pension}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            	<div class="layui-col-lg3">
+			                	<div class="layui-input-inline">
+			                  		<input type="number" name="per_pension" value="{{d.data.per_pension}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            </div>
+			            <div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg1">
+								<label class="layui-form-label">医疗保险金：</label>
+							</div>
+			              	<div class="layui-col-lg3">
+			              		<div class="layui-input-inline">
+			                  		<input type="number" name="com_medical" value="{{d.data.com_medical}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            	<div class="layui-col-lg3">
+			                	<div class="layui-input-inline">
+			                  		<input type="number" name="per_medical" value="{{d.data.per_medical}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            </div>
+			            <div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg1">
+								<label class="layui-form-label">失业保险金：</label>
+							</div>
+			              	<div class="layui-col-lg3">
+			              		<div class="layui-input-inline">
+			                  		<input type="number" name="com_unemployment" value="{{d.data.com_unemployment}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            	<div class="layui-col-lg3">
+			                	<div class="layui-input-inline">
+			                  		<input type="number" name="per_unemployment" value="{{d.data.per_unemployment}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            </div>
+			            <div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg1">
+								<label class="layui-form-label">基本住房公积金：</label>
+							</div>
+			              	<div class="layui-col-lg3">
+			              		<div class="layui-input-inline">
+			                  		<input type="number" name="com_provident_fund" value="{{d.data.com_provident_fund}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            	<div class="layui-col-lg3">
+			                	<div class="layui-input-inline">
+			                  		<input type="number" name="per_provident_fund" value="{{d.data.per_provident_fund}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            </div>
+			            <div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg1">
+								<label class="layui-form-label">补充住房公积金：</label>
+							</div>
+			              	<div class="layui-col-lg3">
+			              		<div class="layui-input-inline">
+			                  		<input type="number" name="com_provident_fund_supplement" value="{{d.data.com_provident_fund_supplement}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            	<div class="layui-col-lg3">
+			                	<div class="layui-input-inline">
+			                  		<input type="number" name="per_provident_fund_supplement" value="{{d.data.per_provident_fund_supplement}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            </div>
+			            <div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg1">
+								<label class="layui-form-label">工伤保险金：</label>
+							</div>
+			              	<div class="layui-col-lg3">
+			              		<div class="layui-input-inline">
+			                  		<input type="number" name="com_work_injury" value="{{d.data.com_work_injury}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            </div>
+			            <div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg1">
+								<label class="layui-form-label">生育保险金：</label>
+							</div>
+			              	<div class="layui-col-lg3">
+			              		<div class="layui-input-inline">
+			                  		<input type="number" name="com_bear" value="{{d.data.com_bear}}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+			                	</div>
+			                	<div class="layui-form-mid layui-word-aux">%</div>
+			              	</div>
+			            </div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 试用期：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="probation" lay-verify="required" placeholder="请输入试用期时间" class="layui-input" value="{{d.data.probation}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux">月，在统计考勤、统计薪酬会自动按不动的比例算出准确的薪酬（这一步还未实现）</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 迟到早退允许次数：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="late_amount" lay-verify="required" placeholder="请输入试用期时间" class="layui-input" value="{{d.data.late_amount}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux">次</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 迟到早退最低罚金：</label>
+							<div class="layui-input-inline">
+								<input type="number" name="late_gold" lay-verify="required" placeholder="请输入试用期时间" class="layui-input" value="{{d.data.late_gold}}">
+							</div>
+							<div class="layui-form-mid layui-word-aux">元，在超过容忍次数及单次容忍时间后最低扣除的金额</div>
+						</div>
+						<div class="layui-form-item" style="border: 0;">
+							<div class="layui-input-block">
+								<button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-submit">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+						</div>
+					</script>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	layui.use(['admin', 'form'], function(){
+		var $ = layui.$,
+	  	form = layui.form,
+	  	admin = layui.admin;
+		
+	  	//
+	  	form.on('submit(LAY-user-front-submit)', function(data){
+    		var field = data.field;
+    		
+    		$.ajax({
+    			type: "POST",
+				url: "/manager/finance/setting/update",
+				dataType:'json',//预期服务器返回的数据类型
+				contentType: "application/json; charset=utf-8",
+				async: false,
+				data: JSON.stringify(field),
+				success: function(data){
+					layer.open({
+                        content: data.msg,
+                        btn: ['确认'],
+                        yes: function(index, layero) {
+                        	layer.close(index);
+                        	//刷新当前页面
+    			    		window.location.reload();
+                        }
+                    });
+				}, error: function(){
+					location.hash='/system/404';
+				}
+    		});
+    		return false;
+  		});
+	});
+	
+	//渲染该模板下的动态表单
+	layui.data.done = function(d){
+	  	layui.use(['form'], function(){
+	  		var $ = layui.$, form = layui.form;
+	  		if(d.data.type == 1) {
+	  			$('#h_type').append("<option value='0'>两种方式同用</option>"
+	  					+"<option value='1' selected>基本住房公积金</option>"
+	  					+"<option value='2'>补充住房公积金</option>"
+	  					+"<option value='3'>不缴纳公积金</option>");
+	  		} else if(d.data.type == 2) {
+	  			$('#h_type').append("<option value='0'>两种方式同用</option>"
+	  					+"<option value='1'>基本住房公积金</option>"
+	  					+"<option value='2' selected>补充住房公积金</option>"
+	  					+"<option value='3'>不缴纳公积金</option>");
+	  		} else if(d.data.type == 0) {
+	  			$('#h_type').append("<option value='0' selected>两种方式同用</option>"
+	  					+"<option value='1'>基本住房公积金</option>"
+	  					+"<option value='2'>补充住房公积金</option>"
+	  					+"<option value='3'>不缴纳公积金</option>");
+	  		} else {
+	  			$('#h_type').append("<option value='0'>两种方式同用</option>"
+	  					+"<option value='1'>基本住房公积金</option>"
+	  					+"<option value='2'>补充住房公积金</option>"
+	  					+"<option value='3' selected>不缴纳公积金</option>");
+	  		}
+	     	form.render();
+	  	});
+	};
+</script>
+
+
+
+
+
+
+
+

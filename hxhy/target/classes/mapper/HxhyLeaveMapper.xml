@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxhy.mapper.HxhyLeaveMapper">
+	
+	<!-- 查询所有的请假类型 -->
+	<select id="listInfo" resultType="com.hxhy.model.dto.AttendanceLeave">
+		SELECT id, title, description, amount, date, lower_limit, upper_limit, is_del, is_pay, add_date
+		FROM hxhy_leave
+	</select>
+</mapper>

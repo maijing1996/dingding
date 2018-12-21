@@ -1,0 +1,82 @@
+
+<div class="layui-main layui-form">
+	<div class="layui-body-ctr">
+		<div class="layui-ctt1">
+			<form class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">添加上班时间</li>
+				</ul>
+				<div class="layui-tab-content">
+					<script type="text/html" template>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><span>*</span> 工作方案：</label>
+							<div class="layui-input-inline">
+								<select name="work_id" id="title">
+								</select>
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">上班时间：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="on_duty" id="on_duty" value="{{ d.params.on_duty || '' }}" lay-verify="required" placeholder="请输入上班时间" class="layui-input">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">下班时间：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="off_duty" id="off_duty" value="{{ d.params.off_duty || '' }}" lay-verify="required" placeholder="请输入下班时间" class="layui-input">
+							</div>
+						</div>
+
+						<input name="id" type="hidden" value="{{ d.params.id || '' }}">
+					</script>
+					<div class="layui-form-item" style="border: 0;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="OM-form-submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	layui.use(['admin', 'form', 'upload', 'laydate'], function(){
+ 	 	var $ = layui.$,
+  		form = layui.form,
+  		upload = layui.upload;
+ 		var laydate = layui.laydate;
+ 		
+ 		 laydate.render({
+ 	 	     elem: '#off_duty'
+ 	 	     ,type: 'time'
+ 	 	 });
+ 		 
+ 		 laydate.render({
+ 	  	     elem: '#on_duty'
+ 	  	     ,type: 'time'
+ 	  	 });
+ 		
+  		//上传头像
+  		upload.render({
+    		elem: '#layuiadmin-upload-useradmin',
+    		url: '/upload',
+    		accept: 'images',
+    		method: 'get',
+    		acceptMime: 'image/*',
+    		done: function(res){
+    			console.log(res);
+      			$(this.item).prev("div").children("input").val(res.url);
+      			$("#pic2").attr("src",res.file);
+      			//动态加载
+    			form.render();
+    		}
+  		});
+	})
+</script>
+

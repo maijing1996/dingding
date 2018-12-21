@@ -1,0 +1,18 @@
+package com.hxhy.service;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhyOperationLogMapper;
+import com.hxhy.model.po.HxhyOperationLog;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyOperationLogService extends BaseService<HxhyOperationLog, HxhyOperationLogMapper> {
+
+	@Override
+	protected String getTableName() {
+		
+		return "hxhy_operation_log";
+	}
+
+}

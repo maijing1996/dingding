@@ -1,0 +1,23 @@
+package com.hxhy.service;
+
+import org.springframework.stereotype.Service;
+
+import com.hxhy.mapper.HxhyManagerMapper;
+import com.hxhy.model.po.HxhyManager;
+import com.hxhy.service.common.BaseService;
+
+@Service
+public class HxhyManagerService extends BaseService<HxhyManager, HxhyManagerMapper> {
+
+	@Override
+	protected String getTableName() {
+		return null;
+	}
+
+	public HxhyManager login(String account, String passwd) {
+		
+		return mapper.login(account, passwd);
+	}
+	
+	
+}

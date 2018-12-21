@@ -1,0 +1,66 @@
+package com.hxhy.model.po;
+
+import java.util.Date;
+
+import com.hxhy.model.common.BaseEntity;
+
+public class HxhySupplementAttendance extends BaseEntity {
+
+	private String user_id;
+	private Long attendance_id;
+	private Long department_id;
+	private Date supplement_date;
+	private Date duty_date;
+	private Integer is_audit_superior;
+	private Integer is_audit_manager;
+	private Date add_date;
+	
+	public String getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+	public Long getAttendance_id() {
+		return attendance_id;
+	}
+	public void setAttendance_id(Long attendance_id) {
+		this.attendance_id = attendance_id;
+	}
+	public Long getDepartment_id() {
+		return department_id;
+	}
+	public void setDepartment_id(Long department_id) {
+		this.department_id = department_id;
+	}
+	public Date getSupplement_date() {
+		return supplement_date;
+	}
+	public void setSupplement_date(Date supplement_date) {
+		this.supplement_date = supplement_date;
+	}
+	public Date getDuty_date() {
+		return duty_date;
+	}
+	public void setDuty_date(Date duty_date) {
+		this.duty_date = duty_date;
+	}
+	public Integer getIs_audit_superior() {
+		return is_audit_superior;
+	}
+	public void setIs_audit_superior(Integer is_audit_superior) {
+		this.is_audit_superior = is_audit_superior;
+	}
+	public Integer getIs_audit_manager() {
+		return is_audit_manager;
+	}
+	public void setIs_audit_manager(Integer is_audit_manager) {
+		this.is_audit_manager = is_audit_manager;
+	}
+	public Date getAdd_date() {
+		return add_date;
+	}
+	public void setAdd_date(Date add_date) {
+		this.add_date = add_date;
+	}
+}
